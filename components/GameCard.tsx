@@ -1,5 +1,6 @@
 "use client";
 
+import toast from "react-hot-toast";
 import Link from "next/link";
 import { addToCart } from "@/lib/cart";
 
@@ -13,7 +14,6 @@ type Product = {
 };
 
 export default function GameCard({ game }: { game: Product }) {
-
   const buttonText =
     game.category === "games"
       ? "عرض اللعبة"
@@ -27,7 +27,6 @@ export default function GameCard({ game }: { game: Product }) {
       ? "عرض العرض"
       : "عرض";
 
-
   const link =
     game.category === "games"
       ? `/games/${game.id}`
@@ -40,7 +39,6 @@ export default function GameCard({ game }: { game: Product }) {
       : game.category === "offers"
       ? `/offers/${game.id}`
       : "#";
-
 
   const categoryName =
     game.category === "games"
@@ -62,59 +60,61 @@ export default function GameCard({ game }: { game: Product }) {
       category: game.category,
     });
 
-    alert("تمت إضافة المنتج للسلة 🛒");
+    toast.success(`تم إضافة ${game.name} إلى السلة 🛒`);
   }
 
 
   return (
-    <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-blue-500 transition duration-300 group">
+    <div className="relative bg-zinc-900 rounded-xl sm:rounded-2xl overflow-hidden border border-zinc-800 hover:border-blue-500 transition duration-300 group">
+
+
+      {game.category === "offers" && (
+        <div className="absolute top-3 -right-11 rotate-45 bg-red-600 text-white text-[10px] font-bold py-1 w-32 text-center shadow-lg z-20">
+          خصم خاص
+        </div>
+      )}
 
 
       <div className="overflow-hidden">
         <img
           src={game.image}
           alt={game.name}
-          className="w-full h-48 sm:h-60 object-cover group-hover:scale-110 transition duration-500"
+          className="w-full h-32 sm:h-48 md:h-60 object-cover group-hover:scale-110 transition duration-500"
         />
       </div>
 
 
+      <div className="p-3 sm:p-5">
 
-      <div className="p-4 sm:p-5">
 
-
-        <span className="inline-block bg-blue-600 px-3 py-1 rounded-full text-xs font-bold mb-3">
+        <span className="inline-block bg-blue-600 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold mb-2 sm:mb-3">
           {categoryName}
         </span>
 
 
-
-        <h2 className="text-lg sm:text-xl font-bold line-clamp-2 min-h-[56px]">
+        <h2 className="text-sm sm:text-xl font-bold line-clamp-2 min-h-[42px] sm:min-h-[56px]">
           {game.name}
         </h2>
 
 
-
         {game.platform && (
-          <p className="text-blue-400 mt-2 font-bold">
+          <p className="text-blue-400 mt-1 sm:mt-2 font-bold text-sm sm:text-base">
             {game.platform}
           </p>
         )}
 
 
-
         <button
           onClick={handleAddToCart}
-          className="w-full mt-5 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition active:scale-95"
+          className="w-full mt-3 sm:mt-5 bg-blue-600 hover:bg-blue-700 py-2 sm:py-3 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold transition active:scale-95"
         >
           🛒 أضف للسلة
         </button>
 
 
-
         <Link
           href={link}
-          className="block w-full mt-3 bg-red-600 hover:bg-red-700 py-3 rounded-xl font-bold text-center transition active:scale-95"
+          className="block w-full mt-2 sm:mt-3 bg-red-600 hover:bg-red-700 py-2 sm:py-3 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold text-center transition active:scale-95"
         >
           {buttonText}
         </Link>

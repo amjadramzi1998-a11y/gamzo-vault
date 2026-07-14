@@ -7,6 +7,7 @@ export default function Header() {
   const [cartCount, setCartCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
+
   useEffect(() => {
     const updateCart = () => {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -28,31 +29,39 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-zinc-800">
 
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
 
 
-        <Link href="/" className="flex items-center gap-3">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 sm:gap-3">
+
 
           <img
             src="/efdeb9c4-4d0c-4653-adbb-ecde5fee0381.png"
             alt="Gamzo"
-            className="w-12 h-12 rounded-xl hover:scale-110 transition"
+            className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl hover:scale-110 transition"
           />
 
+
           <div>
-            <h1 className="text-2xl font-extrabold text-blue-500">
+
+            <h1 className="text-xl sm:text-2xl font-extrabold text-blue-500">
               GAMZO
             </h1>
 
-            <p className="text-xs text-gray-400">
+            <p className="text-[10px] sm:text-xs text-gray-400">
               Gaming Store
             </p>
+
           </div>
+
 
         </Link>
 
 
 
+        {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-8 font-semibold">
 
           <Link href="/">الرئيسية</Link>
@@ -66,17 +75,19 @@ export default function Header() {
 
 
 
-        <div className="flex items-center gap-3">
+        {/* Actions */}
+        <div className="flex items-center gap-2 sm:gap-3">
 
 
           <Link
             href="/cart"
-            className="relative bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl font-bold"
+            className="relative bg-zinc-800 hover:bg-zinc-700 px-3 sm:px-4 py-2 rounded-xl font-bold"
           >
+
             🛒
 
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -98,7 +109,7 @@ export default function Header() {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden bg-zinc-800 px-3 py-2 rounded-xl text-xl"
+            className="md:hidden bg-zinc-800 px-3 py-2 rounded-xl text-lg"
           >
             ☰
           </button>
@@ -106,36 +117,45 @@ export default function Header() {
 
         </div>
 
+
       </div>
 
 
 
       {menuOpen && (
-        <nav className="md:hidden bg-zinc-950 border-t border-zinc-800 px-6 py-5 flex flex-col gap-4 font-bold">
+
+        <nav className="md:hidden bg-zinc-950 border-t border-zinc-800 px-5 py-5 flex flex-col gap-4 font-bold">
+
 
           <Link href="/" onClick={() => setMenuOpen(false)}>
             الرئيسية
           </Link>
 
+
           <Link href="/games" onClick={() => setMenuOpen(false)}>
             🎮 الألعاب
           </Link>
+
 
           <Link href="/playstation" onClick={() => setMenuOpen(false)}>
             🕹️ PlayStation
           </Link>
 
+
           <Link href="/accessories" onClick={() => setMenuOpen(false)}>
             🎧 الإكسسوارات
           </Link>
+
 
           <Link href="/services" onClick={() => setMenuOpen(false)}>
             🛠️ الخدمات
           </Link>
 
+
           <Link href="/offers" onClick={() => setMenuOpen(false)}>
             🔥 العروض
           </Link>
+
 
 
           <a
@@ -147,8 +167,11 @@ export default function Header() {
             واتساب
           </a>
 
+
         </nav>
+
       )}
+
 
     </header>
   );

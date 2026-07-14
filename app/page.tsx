@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import CategoryCard from "../components/CategoryCard";
@@ -15,7 +13,7 @@ export default async function Home() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
+      <main className="min-h-screen text-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-red-500">
             حدث خطأ أثناء تحميل البيانات
@@ -45,7 +43,7 @@ export default async function Home() {
     products?.filter((item: any) => item.category === "offers") || [];
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen text-white">
 
       <Header />
 
@@ -55,17 +53,13 @@ export default async function Home() {
 
         <SearchBar />
 
-
-        {/* Categories */}
-
         <section className="mt-14">
 
           <h2 className="text-3xl font-bold mb-8">
             الأقسام
           </h2>
 
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
-
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
             <CategoryCard
               title="الألعاب"
               icon="🎮"
@@ -100,13 +94,11 @@ export default async function Home() {
 
         </section>
 
-
         <ProductSection
           title="🎮 أحدث الألعاب"
           products={games}
           href="/games"
         />
-
 
         <ProductSection
           title="🕹️ أجهزة PlayStation"
@@ -114,20 +106,17 @@ export default async function Home() {
           href="/playstation"
         />
 
-
         <ProductSection
           title="🎧 أحدث الإكسسوارات"
           products={accessories}
           href="/accessories"
         />
 
-
         <ProductSection
           title="🛠️ أحدث الخدمات"
           products={services}
           href="/services"
         />
-
 
         <ProductSection
           title="🔥 أحدث العروض"

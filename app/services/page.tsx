@@ -1,68 +1,97 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Header from "@/components/Header";
+import GameCard from "@/components/GameCard";
 import { supabase } from "@/lib/supabase";
-import Link from "next/link";
 
-export default async function ServicesPage() {
+export default function ServicesPage() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedPlatform, setSelectedPlatform] = useState("PS4");
 
-  const { data: products, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("category", "services");
+  useEffect(() => {
+    loadProducts();
+  }, []);
 
-  if (error) {
-    return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
-        <h1 className="text-2xl">
-          حصل خطأ في تحميل الخدمات
-        </h1>
-      </main>
-    );
+  async function loadProducts() {
+    setLoading(true);
+
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("category", "services")
+      .order("id", { ascending: false });
+
+    if (!error) {
+      setProducts(data || []);
+    }
+
+    setLoading(false);
   }
 
   return (
     <main className="min-h-screen bg-black text-white">
+      <Header />
 
-      <div className="max-w-6xl mx-auto px-6 py-10">
+      <div className="max-w-7xl mx-auto px-6 py-10">
 
-        <h1 className="text-5xl font-bold mb-10 text-center">
-          الخدمات 🛠️
-        </h1>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
 
-        <div className="grid md:grid-cols-3 gap-8">
+          <h1 className="text-4xl font-bold">
+            🛠️ الخدمات
+          </h1>
 
-          {products?.map((product) => (
-            <div
-              key={product.id}
-              className="bg-zinc-900 rounded-2xl overflow-hidden"
+          <div className="flex gap-3">
+
+            <button
+              onClick={() => setSelectedPlatform("PS4")}
+              className={`px-6 py-2 rounded-xl font-bold transition ${
+                selectedPlatform === "PS4"
+                  ? "bg-blue-600 text-white"
+                  : "bg-zinc-800 hover:bg-zinc-700"
+              }`}
             >
+              PS4
+            </button>
 
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-64 object-cover"
-              />
+            <button
+              onClick={() => setSelectedPlatform("PS5")}
+              className={`px-6 py-2 rounded-xl font-bold transition ${
+                selectedPlatform === "PS5"
+                  ? "bg-blue-600 text-white"
+                  : "bg-zinc-800 hover:bg-zinc-700"
+              }`}
+            >
+              PS5
+            </button>
 
-              <div className="p-5">
-
-                <h2 className="text-2xl font-bold">
-                  {product.name}
-                </h2>
-
-                <Link
-                  href={`/services/${product.id}`}
-                  className="inline-block mt-5 bg-blue-600 px-5 py-3 rounded-xl font-bold"
-                >
-                  عرض الخدمة
-                </Link>
-
-              </div>
-
-            </div>
-          ))}
+          </div>
 
         </div>
 
-      </div>
+        {loading ? (
+          <p className="text-gray-400">
+            جاري تحميل الخدمات...
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
+            {products
+              .filter(
+                (product) => product.platform === selectedPlatform
+              )
+              .map((product) => (
+                <GameCard
+                  key={product.id}
+                  game={product}
+                />
+              ))}
+
+          </div>
+        )}
+
+      </div>
     </main>
   );
 }

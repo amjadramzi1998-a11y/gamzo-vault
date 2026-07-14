@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import Footer from "@/components/Footer";
 
@@ -29,6 +30,19 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 2000,
+            style: {
+              background: "#18181b",
+              color: "#fff",
+              border: "1px solid #2563eb",
+              borderRadius: "12px",
+            },
+          }}
+        />
 
         {children}
 

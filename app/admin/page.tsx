@@ -228,9 +228,14 @@ setEditingId(null);
             onChange={(e) => setName(e.target.value)}
             className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
           />
-          <select
+         <select
   value={category}
-  onChange={(e) => setCategory(e.target.value)}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    setCategory(value);
+    setPlatform("PS4");
+  }}
   className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
 >
   <option value="games">🎮 ألعاب</option>
@@ -239,18 +244,24 @@ setEditingId(null);
   <option value="services">🛠️ خدمات</option>
   <option value="offers">🔥 عروض</option>
 </select>
-
-          {category === "games" && (
-  <select
-    value={platform}
-    onChange={(e) => setPlatform(e.target.value)}
-    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
-  >
-    <option value="PS4">PS4</option>
-    <option value="PS5">PS5</option>
-    <option value="PC">PC</option>
-  </select>
-)}
+          <select
+  value={platform}
+  onChange={(e) => setPlatform(e.target.value)}
+  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+>
+  {category === "games" ? (
+    <>
+      <option value="PS4">PS4</option>
+      <option value="PS5">PS5</option>
+      <option value="PC">PC</option>
+    </>
+  ) : (
+    <>
+      <option value="PS4">PS4</option>
+      <option value="PS5">PS5</option>
+    </>
+  )}
+</select>
 
           <input
             type="file"
