@@ -244,19 +244,23 @@ setEditingId(null);
   <option value="services">🛠️ خدمات</option>
   <option value="offers">🔥 عروض</option>
 </select>
-          <select
+<label className="block text-sm text-gray-400 mb-2">
+  المنصة
+</label>
+
+<select
   value={platform}
   onChange={(e) => setPlatform(e.target.value)}
   className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
 >
-  <option value="PS4">PS4</option>
-  <option value="PS5">PS5</option>
+  <option value="PS4">🎮 PS4</option>
+  <option value="PS5">🎮 PS5</option>
 
   {category === "games" && (
-    <option value="PC">PC</option>
+    <option value="PC">💻 PC</option>
   )}
 </select>
-
+        
           <input
             type="file"
             accept="image/*"
