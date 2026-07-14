@@ -4,12 +4,14 @@ import CategoryCard from "../components/CategoryCard";
 import { supabase } from "../lib/supabase";
 import Hero from "../components/Hero";
 import ProductSection from "../components/ProductSection";
+export const revalidate = 0;
 
 export default async function Home() {
   const { data: products, error } = await supabase
     .from("products")
     .select("*")
     .order("id", { ascending: false });
+    console.log("PRODUCTS:", products);
 
   if (error) {
     return (
