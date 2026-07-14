@@ -249,17 +249,11 @@ setEditingId(null);
   onChange={(e) => setPlatform(e.target.value)}
   className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
 >
-  {category === "games" ? (
-    <>
-      <option value="PS4">PS4</option>
-      <option value="PS5">PS5</option>
-      <option value="PC">PC</option>
-    </>
-  ) : (
-    <>
-      <option value="PS4">PS4</option>
-      <option value="PS5">PS5</option>
-    </>
+  <option value="PS4">PS4</option>
+  <option value="PS5">PS5</option>
+
+  {category === "games" && (
+    <option value="PC">PC</option>
   )}
 </select>
 
