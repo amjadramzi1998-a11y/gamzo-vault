@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #05070d;
+  --background: #000000;
   --foreground: #ffffff;
 }
 
@@ -21,16 +21,11 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 
-  background:
-    radial-gradient(circle at 15% 20%, rgba(37,99,235,.22), transparent 28%),
-    radial-gradient(circle at 85% 75%, rgba(220,38,38,.18), transparent 30%),
-    radial-gradient(circle at 50% 50%, rgba(255,255,255,.025), transparent 55%),
-    linear-gradient(180deg, #0b1020 0%, #06080f 40%, #030406 100%);
-
+  background: #000000;
   background-attachment: fixed;
 }
 
-/* طبقة إضاءة خفيفة */
+/* طبقة خفيفة جدًا لإضافة عمق بدون تغيير اللون */
 body::before {
   content: "";
   position: fixed;
@@ -38,8 +33,7 @@ body::before {
   pointer-events: none;
 
   background:
-    radial-gradient(circle at top, rgba(59,130,246,.08), transparent 45%),
-    radial-gradient(circle at bottom right, rgba(239,68,68,.06), transparent 40%);
+    radial-gradient(circle at center, rgba(255,255,255,.02), transparent 70%);
 
   z-index: -2;
 }
@@ -52,14 +46,16 @@ body::after {
   pointer-events: none;
 
   background-image:
-    radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px);
+    radial-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
 
   background-size: 32px 32px;
 
-  opacity: .35;
+  opacity: .25;
 
   z-index: -1;
 }
+
+/* Logo Animation */
 @keyframes logoShow {
   from {
     opacity: 0;
@@ -72,7 +68,7 @@ body::after {
   }
 }
 
-
+/* Slogan Animation */
 @keyframes sloganShow {
   from {
     opacity: 0;
@@ -84,6 +80,8 @@ body::after {
     transform: translateY(0);
   }
 }
+
+/* Shine Effect */
 @keyframes shine {
   0% {
     left: -100%;
