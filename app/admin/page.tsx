@@ -248,7 +248,6 @@ setEditingId(null);
 <label className="block text-sm text-gray-400 mb-2">
   المنصة
 </label>
-
 <select
   value={platform}
   onChange={(e) => setPlatform(e.target.value)}
