@@ -245,7 +245,11 @@ setEditingId(null);
   <option value="services">🛠️ خدمات</option>
   <option value="offers">🔥 عروض</option>
 </select>
+<p className="text-red-500 font-bold">
+  category = {category}
+</p>
 <select
+  key={category}
   value={platform}
   onChange={(e) => setPlatform(e.target.value)}
   className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
@@ -253,9 +257,9 @@ setEditingId(null);
   <option value="PS4">🎮 PS4</option>
   <option value="PS5">🎮 PS5</option>
 
-  {category === "games" && (
+  {category === "games" ? (
     <option value="PC">💻 PC</option>
-  )}
+  ) : null}
 </select>
         
           <input
