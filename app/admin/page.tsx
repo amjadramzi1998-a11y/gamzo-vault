@@ -245,10 +245,6 @@ setEditingId(null);
   <option value="services">🛠️ خدمات</option>
   <option value="offers">🔥 عروض</option>
 </select>
-<label className="block text-sm text-gray-400">
-  المنصة
-</label>
-
 <select
   value={platform}
   onChange={(e) => setPlatform(e.target.value)}
@@ -306,7 +302,12 @@ setEditingId(null);
   type="text"
   placeholder="🔍 ابحث عن منتج..."
   value={search}
-  onChange={(e) => setSearch(e.target.value)}
+ onChange={(e) => {
+  const value = e.target.value;
+
+  setCategory(value);
+  setPlatform("PS4");
+}}
   className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4 mb-6"
  />
 
