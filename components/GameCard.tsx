@@ -1,7 +1,8 @@
 "use client";
 
-import toast from "react-hot-toast";
+import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { addToCart } from "@/lib/cart";
 
 type Product = {
@@ -10,23 +11,9 @@ type Product = {
   image: string;
   category: string;
   platform?: string;
-  description?: string;
 };
 
 export default function GameCard({ game }: { game: Product }) {
-  const buttonText =
-    game.category === "games"
-      ? "عرض اللعبة"
-      : game.category === "playstation"
-      ? "عرض الجهاز"
-      : game.category === "accessories"
-      ? "عرض الإكسسوار"
-      : game.category === "services"
-      ? "عرض الخدمة"
-      : game.category === "offers"
-      ? "عرض العرض"
-      : "عرض";
-
   const link =
     game.category === "games"
       ? `/games/${game.id}`
@@ -36,11 +23,20 @@ export default function GameCard({ game }: { game: Product }) {
       ? `/accessories/${game.id}`
       : game.category === "services"
       ? `/services/${game.id}`
-      : game.category === "offers"
-      ? `/offers/${game.id}`
-      : "#";
+      : `/offers/${game.id}`;
 
-  const categoryName =
+  const buttonText =
+    game.category === "games"
+      ? "عرض اللعبة"
+      : game.category === "playstation"
+      ? "عرض الجهاز"
+      : game.category === "accessories"
+      ? "عرض الإكسسوار"
+      : game.category === "services"
+      ? "عرض الخدمة"
+      : "عرض العرض";
+
+  const categoryText =
     game.category === "games"
       ? "🎮 لعبة"
       : game.category === "playstation"
@@ -51,7 +47,6 @@ export default function GameCard({ game }: { game: Product }) {
       ? "🛠️ خدمة"
       : "🔥 عرض";
 
-
   function handleAddToCart() {
     addToCart({
       id: game.id,
@@ -60,68 +55,53 @@ export default function GameCard({ game }: { game: Product }) {
       category: game.category,
     });
 
-    toast.success(`تم إضافة ${game.name} إلى السلة 🛒`);
+    toast.success("تمت الإضافة إلى السلة 🛒");
   }
 
-
   return (
-    <div className="relative bg-zinc-900 rounded-xl sm:rounded-2xl overflow-hidden border border-zinc-800 hover:border-blue-500 transition duration-300 group">
+    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500 transition">
 
-
-      {game.category === "offers" && (
-        <div className="absolute top-3 -right-11 rotate-45 bg-red-600 text-white text-[10px] font-bold py-1 w-32 text-center shadow-lg z-20">
-          خصم خاص
-        </div>
-      )}
-
-
-      <div className="overflow-hidden">
-        <img
+      <div className="relative w-full h-60">
+        <Image
           src={game.image}
           alt={game.name}
-          className="w-full h-32 sm:h-48 md:h-60 object-cover group-hover:scale-110 transition duration-500"
+          fill
+          className="object-cover"
+          unoptimized
         />
       </div>
 
+      <div className="p-5">
 
-      <div className="p-3 sm:p-5">
-
-
-        <span className="inline-block bg-blue-600 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold mb-2 sm:mb-3">
-          {categoryName}
+        <span className="inline-block bg-blue-600 text-xs px-3 py-1 rounded-full mb-3">
+          {categoryText}
         </span>
 
-
-        <h2 className="text-sm sm:text-xl font-bold line-clamp-2 min-h-[42px] sm:min-h-[56px]">
+        <h2 className="text-xl font-bold min-h-[56px]">
           {game.name}
         </h2>
 
-
         {game.platform && (
-          <p className="text-blue-400 mt-1 sm:mt-2 font-bold text-sm sm:text-base">
+          <p className="text-blue-400 font-bold mt-2">
             {game.platform}
           </p>
         )}
 
-
-        <button
-          onClick={handleAddToCart}
-          className="w-full mt-3 sm:mt-5 bg-blue-600 hover:bg-blue-700 py-2 sm:py-3 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold transition active:scale-95"
+       <button
+  onClick={handleAddToCart}
+          className="w-full mt-5 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition"
         >
           🛒 أضف للسلة
         </button>
 
-
         <Link
           href={link}
-          className="block w-full mt-2 sm:mt-3 bg-red-600 hover:bg-red-700 py-2 sm:py-3 rounded-lg sm:rounded-xl text-sm sm:text-base font-bold text-center transition active:scale-95"
+          className="block w-full mt-3 bg-red-600 hover:bg-red-700 py-3 rounded-xl text-center font-bold transition"
         >
           {buttonText}
         </Link>
 
-
       </div>
-
 
     </div>
   );
