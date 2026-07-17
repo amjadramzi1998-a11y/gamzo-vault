@@ -55,24 +55,29 @@ export default function GameCard({ game }: { game: Product }) {
       category: game.category,
     });
 
-    toast.success("تمت الإضافة إلى السلة 🛒");
+    toast.success(`تمت إضافة ${game.name} إلى السلة 🛒`);
   }
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500 transition">
+    <div className="relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500 transition duration-300 group">
 
-      <div className="relative w-full h-60">
+      {game.category === "offers" && (
+        <div className="absolute top-3 -right-11 rotate-45 bg-red-600 text-white text-[10px] font-bold py-1 w-32 text-center shadow-lg z-20">
+          خصم خاص
+        </div>
+      )}
+
+      <div className="relative w-full h-60 overflow-hidden">
         <Image
           src={game.image}
           alt={game.name}
           fill
-          className="object-cover"
+          className="object-cover group-hover:scale-110 transition duration-500"
           unoptimized
         />
       </div>
 
       <div className="p-5">
-
         <span className="inline-block bg-blue-600 text-xs px-3 py-1 rounded-full mb-3">
           {categoryText}
         </span>
@@ -87,22 +92,20 @@ export default function GameCard({ game }: { game: Product }) {
           </p>
         )}
 
-       <button
-  onClick={handleAddToCart}
-          className="w-full mt-5 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition"
+        <button
+          onClick={handleAddToCart}
+          className="w-full mt-5 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition active:scale-95"
         >
           🛒 أضف للسلة
         </button>
 
         <Link
           href={link}
-          className="block w-full mt-3 bg-red-600 hover:bg-red-700 py-3 rounded-xl text-center font-bold transition"
+          className="block w-full mt-3 bg-red-600 hover:bg-red-700 py-3 rounded-xl text-center font-bold transition active:scale-95"
         >
           {buttonText}
         </Link>
-
       </div>
-
     </div>
   );
 }

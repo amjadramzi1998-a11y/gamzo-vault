@@ -60,7 +60,7 @@ export default function AdminPage() {
 
   setName(game.name);
   setCategory(game.category);
-  setPlatform(game.platform);
+ setPlatform(game.platform);
   setDescription(game.description || "");
 
   // حفظ رابط الصورة الحالية
@@ -245,9 +245,10 @@ setEditingId(null);
   <option value="services">🛠️ خدمات</option>
   <option value="offers">🔥 عروض</option>
 </select>
-<label className="block text-sm text-gray-400 mb-2">
+<label className="block text-sm text-gray-400">
   المنصة
 </label>
+
 <select
   value={platform}
   onChange={(e) => setPlatform(e.target.value)}
