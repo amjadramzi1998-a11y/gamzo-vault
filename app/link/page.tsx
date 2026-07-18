@@ -30,7 +30,7 @@ export default function LinkPage() {
 
         {/* Website */}
         <a
-          href="https://gamzo-vault-iota.vercel.app/"
+          href="https://gamzo-vault-git-main-gamzo.vercel.app/"
           target="_blank"
           className="block mt-8 bg-blue-600 hover:bg-blue-700 py-4 rounded-2xl font-bold transition"
         >
