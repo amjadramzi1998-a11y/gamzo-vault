@@ -60,7 +60,7 @@ export default function AdminPage() {
 
   setName(game.name);
   setCategory(game.category);
- setPlatform(game.platform);
+ setPlatform(game.platform || "PS4");
   setDescription(game.description || "");
 
   // حفظ رابط الصورة الحالية
@@ -126,11 +126,11 @@ if (image) {
       if (editingId) {
   const { error } = await supabase
     .from("products")
-    .update({
+   .update({
   name,
   image: imageUrl,
   category,
-  platform,
+  platform: category === "games" ? platform : null,
   description,
 })
     .eq("id", editingId);
@@ -143,13 +143,13 @@ if (image) {
 } else {
   const { error } = await supabase
     .from("products")
-    .insert({
+   .insert({
   name,
   image: imageUrl,
   category,
-  platform,
+  platform: category === "games" ? platform : null,
   description,
-});
+})
 
   if (error) throw error;
 
@@ -245,23 +245,18 @@ setEditingId(null);
   <option value="services">🛠️ خدمات</option>
   <option value="offers">🔥 عروض</option>
 </select>
-<p className="text-red-500 font-bold">
-  category = {category}
-</p>
-<select
-  key={category}
-  value={platform}
-  onChange={(e) => setPlatform(e.target.value)}
-  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
->
-  <option value="PS4">🎮 PS4</option>
-  <option value="PS5">🎮 PS5</option>
 
-  {category === "games" ? (
+{category === "games" && (
+  <select
+    value={platform}
+    onChange={(e) => setPlatform(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+  >
+    <option value="PS4">🎮 PS4</option>
+    <option value="PS5">🎮 PS5</option>
     <option value="PC">💻 PC</option>
-  ) : null}
-</select>
-        
+  </select>
+)}
           <input
             type="file"
             accept="image/*"
