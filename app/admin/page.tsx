@@ -190,8 +190,8 @@ setEditingId(null);
     <main className="min-h-screen bg-black text-white">
       <div className="max-w-3xl mx-auto px-6 py-10">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-blue-400">
-  🚀 GAMZO ADMIN v2
+<h1 className="text-4xl font-bold text-blue-400">
+  🚀{" "}
   {category === "games"
     ? "إضافة لعبة"
     : category === "playstation"
@@ -247,17 +247,19 @@ setEditingId(null);
   <option value="offers">🔥 عروض</option>
 </select>
 
-{category === "games" && (
-  <select
-    value={platform}
-    onChange={(e) => setPlatform(e.target.value)}
-    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
-  >
-    <option value="PS4">🎮 PS4</option>
-    <option value="PS5">🎮 PS5</option>
+ <select
+  value={platform}
+  onChange={(e) => setPlatform(e.target.value)}
+  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+>
+  <option value="PS4">🎮 PS4</option>
+  <option value="PS5">🎮 PS5</option>
+
+  {category === "games" && (
     <option value="PC">💻 PC</option>
-  </select>
-)}
+  )}
+</select>
+
           <input
             type="file"
             accept="image/*"
