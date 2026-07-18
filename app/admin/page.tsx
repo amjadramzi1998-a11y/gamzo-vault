@@ -190,7 +190,8 @@ setEditingId(null);
     <main className="min-h-screen bg-black text-white">
       <div className="max-w-3xl mx-auto px-6 py-10">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-4xl font-bold text-blue-400">
+  🚀 GAMZO ADMIN v2
   {category === "games"
     ? "إضافة لعبة"
     : category === "playstation"
