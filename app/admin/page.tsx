@@ -19,6 +19,8 @@ export default function AdminPage() {
   const [games, setGames] = useState<any[]>([]);
   const [search, setSearch] = useState("");
 
+  const [filterCategory, setFilterCategory] = useState("all");
+const [filterPlatform, setFilterPlatform] = useState("all");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [currentImage, setCurrentImage] = useState("");
 
@@ -300,19 +302,61 @@ setEditingId(null);
           <h2 className="text-3xl font-bold mb-6">
            جميع المنتجات
           </h2>
-          <input
-  type="text"
-  placeholder="🔍 ابحث عن منتج..."
-  value={search}
-onChange={(e) => setSearch(e.target.value)}
-  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4 mb-6"
- />
+         <div className="grid md:grid-cols-3 gap-4 mb-6">
+  <input
+    type="text"
+    placeholder="🔍 ابحث عن منتج..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+  />
+
+  <select
+    value={filterCategory}
+    onChange={(e) => setFilterCategory(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+  >
+    <option value="all">📦 كل الأقسام</option>
+    <option value="games">🎮 الألعاب</option>
+    <option value="playstation">🕹️ PlayStation</option>
+    <option value="accessories">🎧 الإكسسوارات</option>
+    <option value="services">🛠️ الخدمات</option>
+    <option value="offers">🔥 العروض</option>
+  </select>
+
+  <select
+    value={filterPlatform}
+    onChange={(e) => setFilterPlatform(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+  >
+    <option value="all">🎮 كل المنصات</option>
+    <option value="PS4">🎮 PS4</option>
+    <option value="PS5">🎮 PS5</option>
+    <option value="PC">💻 PC</option>
+  </select>
+</div>
 
           <div className="space-y-4">
             {games
-  .filter((game) =>
-    game.name.toLowerCase().includes(search.toLowerCase())
-  )
+.filter((game) => {
+  const matchesSearch = game.name
+    .toLowerCase()
+    .includes(search.toLowerCase());
+
+  const matchesCategory =
+    filterCategory === "all" ||
+    game.category === filterCategory;
+
+  const matchesPlatform =
+    filterPlatform === "all" ||
+    game.platform === filterPlatform;
+
+  return (
+    matchesSearch &&
+    matchesCategory &&
+    matchesPlatform
+  );
+})
   .map((game) => (
               <div
                 key={game.id}

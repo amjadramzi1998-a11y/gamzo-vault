@@ -21,7 +21,8 @@ export default function GamesPage() {
       .from("products")
       .select("*")
       .eq("category", "games")
-      .eq("platform", platform);
+      .eq("platform", platform)
+      .order("id", { ascending: false });
 
     console.log("GAMES:", data);
     console.log("ERROR:", error);
