@@ -4,6 +4,8 @@ import CategoryCard from "../components/CategoryCard";
 import { supabase } from "../lib/supabase";
 import Hero from "../components/Hero";
 import ProductSection from "../components/ProductSection";
+import SiteRating from "@/components/SiteRating";
+
 export const revalidate = 0;
 
 export default async function Home() {
@@ -11,7 +13,12 @@ export default async function Home() {
     .from("products")
     .select("*")
     .order("id", { ascending: false });
-    console.log("PRODUCTS:", products);
+
+  const { count: visitorsCount } = await supabase
+    .from("visitors")
+    .select("*", { count: "exact", head: true });
+
+  console.log("PRODUCTS:", products);
 
   if (error) {
     return (
@@ -46,17 +53,35 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen text-white">
-
       <Header />
 
       <div className="max-w-7xl mx-auto px-6">
-
         <Hero />
 
         <SearchBar />
+       <section className="mt-8 mb-10">
+  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
+
+    <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+
+      <div className="text-center lg:text-right">
+        <p className="text-gray-300 text-sm">
+          👥 <span className="text-blue-400 font-bold">GAMZO</span> عدد الزائرين
+        </p>
+
+        <h2 className="text-3xl font-black text-white">
+          {(visitorsCount || 0).toLocaleString()}+
+        </h2>
+      </div>
+
+      <SiteRating />
+
+    </div>
+
+  </div>
+</section>
 
         <section className="mt-14">
-
           <h2 className="text-3xl font-bold mb-8">
             الأقسام
           </h2>
@@ -91,9 +116,7 @@ export default async function Home() {
               icon="🔥"
               href="/offers"
             />
-
           </div>
-
         </section>
 
         <ProductSection
@@ -125,9 +148,11 @@ export default async function Home() {
           products={offers}
           href="/offers"
         />
+        
 
+        {/* عداد الزوار */}
+        
       </div>
-
     </main>
   );
 }

@@ -24,6 +24,9 @@ export default function AdminPage() {
 const [filterPlatform, setFilterPlatform] = useState("all");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [currentImage, setCurrentImage] = useState("");
+  const [visitorsCount, setVisitorsCount] = useState(0);
+const [productsCount, setProductsCount] = useState(0);
+const [ratingsCount, setRatingsCount] = useState(0);
 
   useEffect(() => {
     checkUser();
@@ -86,10 +89,22 @@ async function loadGames() {
     .select("*")
     .order("id", { ascending: false });
 
-  if (!error) {
-    setGames(data || []);
-  }
+ if (!error) {
+  setGames(data || []);
+  setProductsCount(data?.length || 0);
 }
+const { count: visitors } = await supabase
+  .from("visitors")
+  .select("*", { count: "exact", head: true });
+
+setVisitorsCount(visitors || 0);
+const { count: ratings } = await supabase
+  .from("ratings")
+  .select("*", { count: "exact", head: true });
+
+setRatingsCount(ratings || 0);
+}
+
   async function saveGame() {
   if (!name) {
     alert("اكتب اسم اللعبة");
@@ -217,6 +232,30 @@ setEditingId(null);
             تسجيل الخروج
           </button>
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+
+  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
+    <p className="text-gray-400 text-sm">👥 عدد الزوار</p>
+    <h2 className="text-3xl font-bold text-blue-400">
+      {visitorsCount}
+    </h2>
+  </div>
+
+  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
+    <p className="text-gray-400 text-sm">🎮 عدد المنتجات</p>
+    <h2 className="text-3xl font-bold text-green-400">
+      {productsCount}
+    </h2>
+  </div>
+
+  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
+    <p className="text-gray-400 text-sm">⭐ عدد التقييمات</p>
+    <h2 className="text-3xl font-bold text-yellow-400">
+      {ratingsCount}
+    </h2>
+  </div>
+
+</div>
 
         <div className="space-y-5">
           <input
@@ -232,6 +271,7 @@ setEditingId(null);
     ? "اسم الخدمة"
     : "اسم العرض"
 }
+
 
             value={name}
             onChange={(e) => setName(e.target.value)}
