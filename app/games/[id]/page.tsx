@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import AddToCartButton from "@/components/AddToCartButton";
+import Rating from "@/components/Rating";
 
 type Props = {
   params: Promise<{
@@ -80,6 +81,11 @@ export default async function GamePage({ params }: Props) {
               {product.description}
             </p>
           )}
+          <Rating
+  productId={product.id}
+  average={product.rating_average || 0}
+  count={product.rating_count || 0}
+/>
 
 
 

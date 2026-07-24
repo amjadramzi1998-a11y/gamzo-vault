@@ -14,6 +14,7 @@ export default function AdminPage() {
   const [platform, setPlatform] = useState("PS4");
   const [category, setCategory] = useState("games");
   const [description, setDescription] = useState("");
+  const [size, setSize] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [games, setGames] = useState<any[]>([]);
@@ -64,6 +65,7 @@ const [filterPlatform, setFilterPlatform] = useState("all");
   setCategory(game.category);
  setPlatform(game.platform || "PS4");
   setDescription(game.description || "");
+  setSize(game.size?.toString() || "");
 
   // حفظ رابط الصورة الحالية
   setCurrentImage(game.image);
@@ -134,6 +136,7 @@ if (image) {
   category,
   platform: category === "games" ? platform : null,
   description,
+  size: category === "games" ? Number(size) || null : null,
 })
     .eq("id", editingId);
 
@@ -151,6 +154,7 @@ if (image) {
   category,
   platform: category === "games" ? platform : null,
   description,
+  size: category === "games" ? Number(size) || null : null,
 })
 
   if (error) throw error;
@@ -164,6 +168,7 @@ if (image) {
 setName("");
 setPlatform("PS4");
 setDescription("");
+setSize("");
 setImage(null);
 setCurrentImage("");
 setEditingId(null);
@@ -251,6 +256,7 @@ setEditingId(null);
 
  <select
   value={platform}
+  
   onChange={(e) => setPlatform(e.target.value)}
   className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
 >
@@ -261,6 +267,16 @@ setEditingId(null);
     <option value="PC">💻 PC</option>
   )}
 </select>
+{category === "games" && (
+  <input
+    type="number"
+    placeholder="💾 حجم اللعبة (GB)"
+    value={size}
+    onChange={(e) => setSize(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+    min="1"
+  />
+)}
 
           <input
             type="file"

@@ -11,6 +11,9 @@ type Product = {
   image: string;
   category: string;
   platform?: string;
+  size?: number;
+  rating_average?: number;
+  rating_count?: number;
 };
 
 export default function GameCard({ game }: { game: Product }) {
@@ -75,9 +78,25 @@ export default function GameCard({ game }: { game: Product }) {
           className="object-cover group-hover:scale-110 transition duration-500"
           unoptimized
         />
+
+        {/* الحجم */}
+        {game.category === "games" && game.size && (
+          <div className="absolute top-3 left-3 bg-black/70 backdrop-blur px-3 py-1 rounded-full text-xs font-bold border border-zinc-700">
+            💾 {game.size} GB
+          </div>
+        )}
+
+        {/* التقييم */}
+        <div className="absolute top-3 right-3 bg-yellow-500/90 text-black px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+          {Number(game.rating_count) > 0
+            ? `⭐ ${Number(game.rating_average).toFixed(1)} (${game.rating_count})`
+            : "⭐ جديد"}
+        </div>
+
       </div>
 
       <div className="p-5">
+
         <span className="inline-block bg-blue-600 text-xs px-3 py-1 rounded-full mb-3">
           {categoryText}
         </span>
@@ -88,7 +107,7 @@ export default function GameCard({ game }: { game: Product }) {
 
         {game.platform && (
           <p className="text-blue-400 font-bold mt-2">
-            {game.platform}
+            🎮 {game.platform}
           </p>
         )}
 
@@ -105,7 +124,9 @@ export default function GameCard({ game }: { game: Product }) {
         >
           {buttonText}
         </Link>
+
       </div>
+
     </div>
   );
 }
