@@ -5,7 +5,7 @@ import { supabase } from "../lib/supabase";
 import Hero from "../components/Hero";
 import ProductSection from "../components/ProductSection";
 import SiteRating from "@/components/SiteRating";
-
+import SiteComments from "@/components/SiteComments";
 export const revalidate = 0;
 
 export default async function Home() {
@@ -148,7 +148,7 @@ export default async function Home() {
           products={offers}
           href="/offers"
         />
-        
+        <SiteComments />
 
         {/* عداد الزوار */}
         

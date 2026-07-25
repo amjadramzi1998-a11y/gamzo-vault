@@ -18,6 +18,7 @@ export default function AdminPage() {
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [games, setGames] = useState<any[]>([]);
+  const [siteAverage, setSiteAverage] = useState(0);
   const [search, setSearch] = useState("");
 
   const [filterCategory, setFilterCategory] = useState("all");
@@ -27,6 +28,7 @@ const [filterPlatform, setFilterPlatform] = useState("all");
   const [visitorsCount, setVisitorsCount] = useState(0);
 const [productsCount, setProductsCount] = useState(0);
 const [ratingsCount, setRatingsCount] = useState(0);
+const [comments, setComments] = useState<any[]>([]);
 
   useEffect(() => {
     checkUser();
@@ -61,7 +63,42 @@ const [ratingsCount, setRatingsCount] = useState(0);
 
   loadGames();
 }
-  function editGame(game: any) {
+
+// ⬇️ أضف الدالة دي هنا
+async function deleteComment(id: number) {
+  const ok = confirm("هل تريد حذف التعليق؟");
+
+  if (!ok) return;
+
+  const { error } = await supabase
+    .from("site_comments")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("حدث خطأ أثناء حذف التعليق");
+    return;
+  }
+
+  loadGames();
+}
+
+function editGame(game: any) {
+  setEditingId(game.id);
+
+  setName(game.name);
+  setCategory(game.category);
+  setPlatform(game.platform || "PS4");
+  setDescription(game.description || "");
+  setSize(game.size?.toString() || "");
+
+  setCurrentImage(game.image);
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+
   setEditingId(game.id);
 
   setName(game.name);
@@ -98,11 +135,28 @@ const { count: visitors } = await supabase
   .select("*", { count: "exact", head: true });
 
 setVisitorsCount(visitors || 0);
-const { count: ratings } = await supabase
-  .from("ratings")
-  .select("*", { count: "exact", head: true });
+const { data: siteRatings } = await supabase
+  .from("site_ratings")
+  .select("rating");
 
-setRatingsCount(ratings || 0);
+if (siteRatings) {
+  setRatingsCount(siteRatings.length);
+
+  const total = siteRatings.reduce(
+    (sum, item) => sum + item.rating,
+    0
+  );
+
+  setSiteAverage(
+    siteRatings.length ? total / siteRatings.length : 0
+  );
+}
+const { data: commentsData } = await supabase
+  .from("site_comments")
+  .select("*")
+  .order("created_at", { ascending: false });
+
+setComments(commentsData || []);
 }
 
   async function saveGame() {
@@ -231,32 +285,40 @@ setEditingId(null);
           >
             تسجيل الخروج
           </button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    
 
-  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
-    <p className="text-gray-400 text-sm">👥 عدد الزوار</p>
+</div>
+<div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+
+  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center">
+    <p className="text-gray-400 text-sm">👥 الزوار</p>
     <h2 className="text-3xl font-bold text-blue-400">
       {visitorsCount}
     </h2>
   </div>
 
-  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
-    <p className="text-gray-400 text-sm">🎮 عدد المنتجات</p>
+  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center">
+    <p className="text-gray-400 text-sm">🎮 المنتجات</p>
     <h2 className="text-3xl font-bold text-green-400">
       {productsCount}
     </h2>
   </div>
 
-  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
-    <p className="text-gray-400 text-sm">⭐ عدد التقييمات</p>
+  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center">
+    <p className="text-gray-400 text-sm">⭐ تقييم الموقع</p>
     <h2 className="text-3xl font-bold text-yellow-400">
+      {siteAverage.toFixed(1)}
+    </h2>
+  </div>
+
+  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 text-center">
+    <p className="text-gray-400 text-sm">📝 عدد التقييمات</p>
+    <h2 className="text-3xl font-bold text-red-400">
       {ratingsCount}
     </h2>
   </div>
 
 </div>
-
         <div className="space-y-5">
           <input
             type="text"
@@ -490,6 +552,41 @@ setEditingId(null);
         </div>
 
       </div>
+      <div className="mt-14">
+  <h2 className="text-3xl font-bold mb-6">
+    💬 تعليقات العملاء
+  </h2>
+
+  <div className="space-y-4">
+    {comments.length === 0 ? (
+      <p className="text-gray-400">لا توجد تعليقات.</p>
+    ) : (
+      comments.map((item) => (
+        <div
+          key={item.id}
+          className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex justify-between items-start"
+        >
+          <div>
+            <h3 className="text-lg font-bold text-blue-400">
+              {item.name}
+            </h3>
+
+            <p className="text-gray-300 mt-2">
+              {item.comment}
+            </p>
+          </div>
+
+          <button
+            onClick={() => deleteComment(item.id)}
+            className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-xl"
+          >
+            🗑 حذف
+          </button>
+        </div>
+      ))
+    )}
+  </div>
+</div>
     </main>
       );
 }
