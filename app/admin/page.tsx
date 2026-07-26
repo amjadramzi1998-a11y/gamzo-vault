@@ -20,6 +20,7 @@ export default function AdminPage() {
   const [games, setGames] = useState<any[]>([]);
   const [siteAverage, setSiteAverage] = useState(0);
   const [search, setSearch] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
 
   const [filterCategory, setFilterCategory] = useState("all");
 const [filterPlatform, setFilterPlatform] = useState("all");
@@ -64,7 +65,6 @@ const [comments, setComments] = useState<any[]>([]);
   loadGames();
 }
 
-// ⬇️ أضف الدالة دي هنا
 async function deleteComment(id: number) {
   const ok = confirm("هل تريد حذف التعليق؟");
 
@@ -85,7 +85,7 @@ async function deleteComment(id: number) {
 
 function editGame(game: any) {
   setEditingId(game.id);
-
+setVideoUrl(game.video_url || "");
   setName(game.name);
   setCategory(game.category);
   setPlatform(game.platform || "PS4");
@@ -98,6 +98,7 @@ function editGame(game: any) {
     top: 0,
     behavior: "smooth",
   });
+  
 
   setEditingId(game.id);
 
@@ -199,13 +200,20 @@ if (image) {
       if (editingId) {
   const { error } = await supabase
     .from("products")
-   .update({
+ .update({
   name,
   image: imageUrl,
   category,
-  platform: category === "games" ? platform : null,
+  platform:
+    category === "games" || category === "playstation"
+      ? platform
+      : null,
   description,
   size: category === "games" ? Number(size) || null : null,
+  video_url:
+    category === "games" || category === "playstation"
+      ? videoUrl
+      : null,
 })
     .eq("id", editingId);
 
@@ -217,13 +225,20 @@ if (image) {
 } else {
   const { error } = await supabase
     .from("products")
-   .insert({
+.insert({
   name,
   image: imageUrl,
   category,
-  platform: category === "games" ? platform : null,
+  platform:
+    category === "games" || category === "playstation"
+      ? platform
+      : null,
   description,
   size: category === "games" ? Number(size) || null : null,
+  video_url:
+    category === "games" || category === "playstation"
+      ? videoUrl
+      : null,
 })
 
   if (error) throw error;
@@ -240,6 +255,7 @@ setDescription("");
 setSize("");
 setImage(null);
 setCurrentImage("");
+setVideoUrl("");
 setEditingId(null);
     } catch (error: any) {
   console.error("SAVE ERROR:", error);
@@ -369,6 +385,15 @@ setEditingId(null);
     <option value="PC">💻 PC</option>
   )}
 </select>
+{(category === "games" || category === "playstation") && (
+  <input
+    type="text"
+    placeholder="🎥 رابط الفيديو (YouTube)"
+    value={videoUrl}
+    onChange={(e) => setVideoUrl(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+  />
+)}
 {category === "games" && (
   <input
     type="number"

@@ -79,19 +79,36 @@ export default function GameCard({ game }: { game: Product }) {
           unoptimized
         />
 
-        {/* الحجم */}
+        {/* الحجم - للألعاب فقط */}
         {game.category === "games" && game.size && (
           <div className="absolute top-3 left-3 bg-black/70 backdrop-blur px-3 py-1 rounded-full text-xs font-bold border border-zinc-700">
             💾 {game.size} GB
           </div>
         )}
 
-        {/* التقييم */}
-        <div className="absolute top-3 right-3 bg-yellow-500/90 text-black px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-          {Number(game.rating_count) > 0
-            ? `⭐ ${Number(game.rating_average).toFixed(1)} (${game.rating_count})`
-            : "⭐ جديد"}
-        </div>
+        {/* التقييم - للألعاب فقط */}
+        {game.category === "games" && (
+          <div className="absolute top-3 right-3 bg-black/70 backdrop-blur px-3 py-1 rounded-xl border border-yellow-500 shadow-lg">
+            {Number(game.rating_count) > 0 ? (
+              <>
+                <div className="flex items-center gap-1">
+                  <span className="text-yellow-400">⭐</span>
+                  <span className="text-white font-bold">
+                    {Number(game.rating_average).toFixed(1)}
+                  </span>
+                </div>
+
+                <p className="text-[10px] text-gray-300 text-center">
+                  ({game.rating_count} تقييم)
+                </p>
+              </>
+            ) : (
+              <p className="text-xs text-white">
+                ⭐ كن أول من يقيم
+              </p>
+            )}
+          </div>
+        )}
 
       </div>
 

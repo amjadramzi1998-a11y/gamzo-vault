@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import AddToCartButton from "@/components/AddToCartButton";
 import Rating from "@/components/Rating";
-
+import TrailerButton from "@/components/TrailerButton";
 type Props = {
   params: Promise<{
     id: string;
@@ -87,11 +87,9 @@ export default async function GamePage({ params }: Props) {
   count={product.rating_count || 0}
 />
 
+<TrailerButton videoUrl={product.video_url} />
 
-
-          <div className="mt-10 flex flex-col gap-4">
-
-
+<div className="mt-10 flex flex-col gap-4">
             <AddToCartButton product={product} />
 
 
