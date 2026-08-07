@@ -36,16 +36,22 @@ export default function SiteComments() {
     if (!name || !comment) {
       alert("اكتب الاسم والتعليق");
       return;
-      const { data: oldComment } = await supabase
-  .from("site_comments")
-  .select("id")
-  .eq("visitor_id", visitorId)
-  .maybeSingle();
+    }
 
-if (oldComment) {
-  alert("لقد قمت بإضافة تعليق من قبل 💬");
-  return;
-}
+    if (!visitorId) {
+      alert("جاري تجهيز بيانات المتصفح، حاول مرة أخرى");
+      return;
+    }
+
+    const { data: oldComment } = await supabase
+      .from("site_comments")
+      .select("id")
+      .eq("visitor_id", visitorId)
+      .maybeSingle();
+
+    if (oldComment) {
+      alert("لقد قمت بإضافة تعليق من قبل 💬");
+      return;
     }
 
     const { error } = await supabase
@@ -57,6 +63,7 @@ if (oldComment) {
       });
 
     if (error) {
+      console.error(error);
       alert("حدث خطأ");
       return;
     }
@@ -65,10 +72,12 @@ if (oldComment) {
     setComment("");
 
     loadComments();
+
+    alert("تم إرسال تعليقك بنجاح، وسيظهر بعد المراجعة 💬");
   }
 
   return (
-    <section className="mt-20">
+    <section className="mt-14 mb-10">
 
       <h2 className="text-3xl font-bold mb-6">
         💬 آراء العملاء
@@ -102,7 +111,6 @@ if (oldComment) {
       <div className="mt-8 space-y-4">
 
         {comments.map((item) => (
-
           <div
             key={item.id}
             className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5"
@@ -115,7 +123,6 @@ if (oldComment) {
               {item.comment}
             </p>
           </div>
-
         ))}
 
       </div>

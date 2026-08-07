@@ -19,21 +19,18 @@ export default function CartPage() {
 
 
   function sendWhatsApp() {
-
     const message = `
-طلب جديد من GAMZO 🔥
+طلب جديد من ATOM 🔥
 
 ${cart
   .map((item, index) => `${index + 1}- ${item.name}`)
   .join("\n")}
 
-
 شكراً لكم 🕹️
-    `;
-
+`;
 
     window.open(
-      `https://wa.me/201015401976?text=${encodeURIComponent(message)}`,
+      `https://wa.me/201067981310?text=${encodeURIComponent(message)}`,
       "_blank"
     );
   }
@@ -47,9 +44,7 @@ ${cart
 
       <div className="max-w-5xl mx-auto px-6 py-10">
 
-
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-
 
           <h1 className="text-4xl font-bold">
             🛒 سلة الطلبات
@@ -68,7 +63,6 @@ ${cart
             </button>
           )}
 
-
         </div>
 
 
@@ -79,15 +73,11 @@ ${cart
             السلة فارغة
           </p>
 
-
         ) : (
-
 
           <>
 
-
             <div className="space-y-4">
-
 
               {cart.map((item) => (
 
@@ -96,9 +86,7 @@ ${cart
                   className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-zinc-900 border border-zinc-800 rounded-2xl p-4"
                 >
 
-
                   <div className="flex items-center gap-4 w-full">
-
 
                     <img
                       src={item.image}
@@ -110,7 +98,6 @@ ${cart
                     <h2 className="text-lg sm:text-xl font-bold">
                       {item.name}
                     </h2>
-
 
                   </div>
 
@@ -128,7 +115,6 @@ ${cart
 
               ))}
 
-
             </div>
 
 
@@ -143,12 +129,9 @@ ${cart
 
           </>
 
-
         )}
 
-
       </div>
-
 
     </main>
   );

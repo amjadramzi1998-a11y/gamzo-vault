@@ -29,7 +29,10 @@ export default function SiteRating() {
 
     if (!data) return;
 
-    const total = data.reduce((sum, item) => sum + item.rating, 0);
+    const total = data.reduce(
+      (sum, item) => sum + item.rating,
+      0
+    );
 
     setCount(data.length);
     setAverage(data.length ? total / data.length : 0);
@@ -65,11 +68,11 @@ export default function SiteRating() {
     setSelected(value);
     await loadData();
 
-    alert("شكراً لتقييم GAMZO ❤️");
+    alert("شكراً لتقييم ATOM ❤️");
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center">
 
       <div className="flex text-2xl gap-1">
         {[1, 2, 3, 4, 5].map((star) => (

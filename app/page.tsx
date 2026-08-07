@@ -6,6 +6,7 @@ import Hero from "../components/Hero";
 import ProductSection from "../components/ProductSection";
 import SiteRating from "@/components/SiteRating";
 import SiteComments from "@/components/SiteComments";
+
 export const revalidate = 0;
 
 export default async function Home() {
@@ -22,9 +23,9 @@ export default async function Home() {
 
   if (error) {
     return (
-      <main className="min-h-screen text-white flex items-center justify-center">
+      <main className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-red-500">
+          <h1 className="text-2xl font-bold">
             حدث خطأ أثناء تحميل البيانات
           </h1>
 
@@ -52,41 +53,49 @@ export default async function Home() {
     products?.filter((item: any) => item.category === "offers") || [];
 
   return (
-    <main className="min-h-screen text-white">
+    <main>
+      {/* Header */}
       <Header />
 
       <div className="max-w-7xl mx-auto px-6">
+
+        {/* Hero */}
         <Hero />
 
+        {/* Search */}
         <SearchBar />
-       <section className="mt-8 mb-10">
-  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
 
-    <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+        {/* Visitors + Rating */}
+        <section className="mt-8 mb-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
 
-      <div className="text-center lg:text-right">
-        <p className="text-gray-300 text-sm">
-          👥 <span className="text-blue-400 font-bold">GAMZO</span> عدد الزائرين
-        </p>
+            <div className="text-center lg:text-right">
+              <p className="text-gray-300 text-sm">
+                👥{" "}
+                <span className="text-blue-400 font-bold">
+                  ATOM
+                </span>{" "}
+                عدد الزائرين
+              </p>
 
-        <h2 className="text-3xl font-black text-white">
-          {(visitorsCount || 0).toLocaleString()}+
-        </h2>
-      </div>
+              <h2 className="text-3xl font-black text-white">
+                {(visitorsCount || 0).toLocaleString()}+
+              </h2>
+            </div>
 
-      <SiteRating />
+            <SiteRating />
 
-    </div>
+          </div>
+        </section>
 
-  </div>
-</section>
-
+        {/* Categories */}
         <section className="mt-14">
           <h2 className="text-3xl font-bold mb-8">
             الأقسام
           </h2>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
+
             <CategoryCard
               title="الألعاب"
               icon="🎮"
@@ -116,8 +125,11 @@ export default async function Home() {
               icon="🔥"
               href="/offers"
             />
+
           </div>
         </section>
+
+        {/* Products */}
 
         <ProductSection
           title="🎮 أحدث الألعاب"
@@ -148,10 +160,10 @@ export default async function Home() {
           products={offers}
           href="/offers"
         />
+
+        {/* Comments */}
         <SiteComments />
 
-        {/* عداد الزوار */}
-        
       </div>
     </main>
   );

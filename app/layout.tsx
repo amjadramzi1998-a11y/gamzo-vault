@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GAMZO | Gaming Store",
-  description: "GAMZO - Play To Win",
+  title: "ATOM | Gaming & Technology",
+  description: "ATOM - Power Your World",
 };
 
 export default function RootLayout({

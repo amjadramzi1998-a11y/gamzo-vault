@@ -1,72 +1,116 @@
 export default function Hero() {
   return (
-    <section className="mt-6 sm:mt-10 mx-2 sm:mx-0 rounded-3xl overflow-hidden relative h-[420px] sm:h-[600px]">
+    <section className="relative mt-4 h-[520px] sm:h-[650px] overflow-hidden rounded-[45px] mx-3 sm:mx-6 bg-black border border-zinc-800/60">
+
 
       {/* Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover scale-110 blur-[2px] z-0"
-      >
-        <source src="/gamzo-banner.mp4" type="video/mp4" />
-      </video>
+      <div className="absolute inset-0 overflow-hidden rounded-[45px]">
 
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/35 z-10"></div>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover object-center scale-105 blur-[3px]"
+        >
+          <source src="/atom-banner.mp4" type="video/mp4" />
+        </video>
 
-      {/* Black Glow */}
-      <div className="absolute inset-0 bg-black/35 z-10"></div>
+      </div>
+
+
+
+      {/* Soft Dark Overlay */}
+      <div className="absolute inset-0 bg-black/40 rounded-[45px]"></div>
+
+
+
+      {/* Smooth Edges Glow */}
+      <div className="absolute inset-0 rounded-[45px] ring-1 ring-white/10"></div>
+
+
+
+      {/* Smooth Bottom Fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 to-transparent rounded-b-[45px]"></div>
+
+
+
 
       {/* Content */}
-      <div className="relative z-20 h-full flex flex-col justify-center items-center text-center px-4 sm:px-10 py-8">
+      <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4">
+
 
         {/* Logo */}
-        <h1 className="text-3xl sm:text-6xl md:text-8xl font-black tracking-wide animate-[logoShow_1s_ease-out]">
+        <h1 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-wide">
 
-          <span className="relative inline-block overflow-hidden text-blue-500 drop-shadow-[0_0_45px_rgba(37,99,235,1)]">
-            GAMZO
 
-            <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white to-transparent opacity-60 animate-[shine_6s_infinite]"></span>
+          {/* ATOM */}
+          <span className="relative -top-8 inline-block overflow-hidden text-blue-500 drop-shadow-[0_0_45px_rgba(37,99,235,1)] animate-[logoShow_1s_ease-out,pulseGlow_3s_infinite]">
+
+            ATOM
+
+
+            {/* Shine */}
+            <span className="absolute top-0 left-[-120%] w-full h-full bg-gradient-to-r from-transparent via-white to-transparent opacity-70 animate-[shine_3s_infinite]"></span>
+
+
           </span>
 
-          <span className="text-white ml-2 sm:ml-3 drop-shadow-[0_0_35px_rgba(255,255,255,0.8)]">
-            VAULT
+
+
+          {/* WORLD */}
+          <span className="text-white ml-2">
+            WORLD
           </span>
+
 
         </h1>
 
+
+
+
         {/* Slogan */}
-        <p className="mt-3 sm:mt-6 text-lg sm:text-3xl md:text-4xl font-black tracking-[6px] sm:tracking-[12px] uppercase text-red-500 drop-shadow-[0_0_35px_rgba(239,68,68,1)] animate-[sloganShow_1.3s_ease-out]">
-          PLAY TO WIN
+        <p className="mt-3 text-lg sm:text-3xl font-black tracking-[8px] text-white">
+          POWER YOUR WORLD
         </p>
+
+
+
 
         {/* Description */}
-        <p className="text-gray-300 mt-3 sm:mt-5 max-w-xl text-xs sm:text-lg">
-          مكتبة الألعاب والخدمات وكل جديد في عالم الجيمينج
+        <p className="text-gray-300 mt-4 max-w-xl text-sm sm:text-lg">
+          نبني عالمك الرقمي بأحدث التكنولوجيا والأجهزة وتجارب الجيمينج
         </p>
 
+
+
+
         {/* Buttons */}
-        <div className="flex flex-col sm:flex-row w-full sm:w-auto justify-center gap-3 sm:gap-5 mt-6 sm:mt-12">
+        <div className="flex flex-col sm:flex-row gap-4 mt-8">
+
 
           <a
             href="/games"
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 px-8 py-3 sm:py-4 rounded-xl font-bold transition duration-300 shadow-[0_0_25px_rgba(37,99,235,0.7)] hover:shadow-[0_0_45px_rgba(37,99,235,1)] hover:scale-105"
+            className="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded-xl font-bold transition shadow-lg"
           >
-            🎮 تصفح الألعاب
+            ⚡ اكتشف منتجاتنا
           </a>
+
+
 
           <a
             href="/offers"
-            className="w-full sm:w-auto border border-red-500 text-white hover:bg-red-600 px-8 py-3 sm:py-4 rounded-xl font-bold transition duration-300 shadow-[0_0_20px_rgba(239,68,68,0.5)] hover:shadow-[0_0_40px_rgba(239,68,68,1)] hover:scale-105"
+            className="border border-blue-500 px-8 py-3 rounded-xl font-bold hover:bg-blue-600 transition"
           >
             🔥 أحدث العروض
           </a>
 
+
         </div>
 
+
       </div>
+
 
     </section>
   );

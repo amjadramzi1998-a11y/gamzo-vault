@@ -7,7 +7,6 @@ export default function Header() {
   const [cartCount, setCartCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
-
   useEffect(() => {
     const updateCart = () => {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -27,31 +26,29 @@ export default function Header() {
 
 
   return (
-    <header className="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-zinc-800">
+    <header className="relative z-50 bg-black border-b border-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
 
-
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 sm:gap-3">
 
-
           <img
-            src="/efdeb9c4-4d0c-4653-adbb-ecde5fee0381.png"
-            alt="Gamzo"
-            className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl hover:scale-110 transition"
+            src="/atom-character.png"
+            alt="ATOM"
+            className="w-16 h-16 sm:w-20 sm:h-20 object-contain hover:scale-110 transition"
           />
 
 
           <div>
 
             <h1 className="text-xl sm:text-2xl font-extrabold text-blue-500">
-              GAMZO
+              ATOM
             </h1>
 
             <p className="text-[10px] sm:text-xs text-gray-400">
-              Gaming Store
+              POWER YOUR WORLD
             </p>
 
           </div>
@@ -64,12 +61,29 @@ export default function Header() {
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-8 font-semibold">
 
-          <Link href="/">الرئيسية</Link>
-          <Link href="/games">الألعاب</Link>
-          <Link href="/playstation">PlayStation</Link>
-          <Link href="/accessories">الإكسسوارات</Link>
-          <Link href="/services">الخدمات</Link>
-          <Link href="/offers">العروض</Link>
+          <Link href="/" className="hover:text-blue-500 transition">
+            الرئيسية
+          </Link>
+
+          <Link href="/games" className="hover:text-blue-500 transition">
+            الألعاب
+          </Link>
+
+          <Link href="/playstation" className="hover:text-blue-500 transition">
+            PlayStation
+          </Link>
+
+          <Link href="/accessories" className="hover:text-blue-500 transition">
+            الإكسسوارات
+          </Link>
+
+          <Link href="/services" className="hover:text-blue-500 transition">
+            الخدمات
+          </Link>
+
+          <Link href="/offers" className="hover:text-blue-500 transition">
+            العروض
+          </Link>
 
         </nav>
 
@@ -81,7 +95,7 @@ export default function Header() {
 
           <Link
             href="/cart"
-            className="relative bg-zinc-800 hover:bg-zinc-700 px-3 sm:px-4 py-2 rounded-xl font-bold"
+            className="relative bg-zinc-800 hover:bg-zinc-700 px-3 sm:px-4 py-2 rounded-xl font-bold transition"
           >
 
             🛒
@@ -97,10 +111,10 @@ export default function Header() {
 
 
           <a
-            href="https://wa.me/201015401976"
+            href="https://wa.me/201067981310"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:block bg-green-600 hover:bg-green-700 px-5 py-2 rounded-xl font-bold"
+            className="hidden sm:block bg-green-600 hover:bg-green-700 px-5 py-2 rounded-xl font-bold transition"
           >
             واتساب
           </a>
@@ -122,6 +136,7 @@ export default function Header() {
 
 
 
+      {/* Mobile Menu */}
       {menuOpen && (
 
         <nav className="md:hidden bg-zinc-950 border-t border-zinc-800 px-5 py-5 flex flex-col gap-4 font-bold">
@@ -159,7 +174,7 @@ export default function Header() {
 
 
           <a
-            href="https://wa.me/201015401976"
+            href="https://wa.me/201067981310"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-green-600 text-center py-3 rounded-xl"
@@ -171,7 +186,6 @@ export default function Header() {
         </nav>
 
       )}
-
 
     </header>
   );
