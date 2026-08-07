@@ -31,7 +31,7 @@ export default function LinkPage() {
 
         {/* Website */}
         <a
-          href="https://gamzo-vault.vercel.app/"
+         href="https://atom-world.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
           className="block mt-8 bg-blue-600 hover:bg-blue-700 py-4 rounded-2xl font-bold transition shadow-lg shadow-blue-600/20"
