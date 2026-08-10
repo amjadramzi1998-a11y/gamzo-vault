@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Orbitron } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import Footer from "@/components/Footer";
@@ -14,6 +14,10 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+const orbitron = Orbitron({
+  variable: "--font-orbitron",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "ATOM | Gaming & Technology",
@@ -26,9 +30,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ar"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+   <html
+  lang="ar"
+  className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} h-full antialiased`}
+
     >
       <body className="min-h-full flex flex-col">
 

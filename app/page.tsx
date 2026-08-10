@@ -39,6 +39,8 @@ export default async function Home() {
 
   const games =
     products?.filter((item: any) => item.category === "games") || [];
+    const laptops =
+  products?.filter((item: any) => item.category === "laptops") || [];
 
   const playstation =
     products?.filter((item: any) => item.category === "playstation") || [];
@@ -63,7 +65,7 @@ export default async function Home() {
         <Hero />
 
         {/* Search */}
-        <SearchBar />
+        <SearchBar products={products || []} />
 
         {/* Visitors + Rating */}
         <section className="mt-8 mb-10">
@@ -89,13 +91,16 @@ export default async function Home() {
         </section>
 
         {/* Categories */}
-        <section className="mt-14">
-          <h2 className="text-3xl font-bold mb-8">
-            الأقسام
-          </h2>
+        <section className="mt-10 mb-16">
+      
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
+          <div className="flex flex-nowrap justify-center gap-5 overflow-x-auto px-2 py-4">
 
+<CategoryCard
+ title="Laptop"
+  icon="💻"
+  href="/laptops"
+/>
             <CategoryCard
               title="الألعاب"
               icon="🎮"
@@ -130,7 +135,11 @@ export default async function Home() {
         </section>
 
         {/* Products */}
-
+<ProductSection
+  title="💻 Laptop"
+  products={laptops}
+  href="/laptops"
+/> 
         <ProductSection
           title="🎮 أحدث الألعاب"
           products={games}

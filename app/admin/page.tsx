@@ -11,6 +11,7 @@ export default function AdminPage() {
   const [checking, setChecking] = useState(true);
 
   const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
   const [platform, setPlatform] = useState("PS4");
   const [category, setCategory] = useState("games");
   const [description, setDescription] = useState("");
@@ -87,6 +88,7 @@ function editGame(game: any) {
   setEditingId(game.id);
 setVideoUrl(game.video_url || "");
   setName(game.name);
+  setPrice(game.price?.toString() || "");
   setCategory(game.category);
   setPlatform(game.platform || "PS4");
   setDescription(game.description || "");
@@ -200,9 +202,10 @@ if (image) {
       if (editingId) {
   const { error } = await supabase
     .from("products")
- .update({
+.update({
   name,
   image: imageUrl,
+  price: Number(price) || null,
   category,
   platform:
     category === "games" || category === "playstation"
@@ -211,9 +214,11 @@ if (image) {
   description,
   size: category === "games" ? Number(size) || null : null,
   video_url:
-    category === "games" || category === "playstation"
-      ? videoUrl
-      : null,
+  category === "games" ||
+  category === "playstation" ||
+  category === "laptops"
+    ? videoUrl
+    : null,
 })
     .eq("id", editingId);
 
@@ -228,6 +233,7 @@ if (image) {
 .insert({
   name,
   image: imageUrl,
+  price: Number(price) || null,
   category,
   platform:
     category === "games" || category === "playstation"
@@ -236,9 +242,11 @@ if (image) {
   description,
   size: category === "games" ? Number(size) || null : null,
   video_url:
-    category === "games" || category === "playstation"
-      ? videoUrl
-      : null,
+  category === "games" ||
+  category === "playstation" ||
+  category === "laptops"
+    ? videoUrl
+    : null,
 })
 
   if (error) throw error;
@@ -250,6 +258,7 @@ if (image) {
       loadGames();
 
 setName("");
+setPrice("");
 setPlatform("PS4");
 setDescription("");
 setSize("");
@@ -361,39 +370,50 @@ setEditingId(null);
     const value = e.target.value;
 
     setCategory(value);
-    setPlatform("PS4");
+
+    if (value === "laptops") {
+      setPlatform("Laptop");
+    } else {
+      setPlatform("PS4");
+    }
   }}
   className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
 >
-  <option value="games">🎮 ألعاب</option>
-  <option value="playstation">🕹️ أجهزة PlayStation</option>
-  <option value="accessories">🎧 إكسسوارات</option>
-  <option value="services">🛠️ خدمات</option>
-  <option value="offers">🔥 عروض</option>
+  <option value="games">🎮 الألعاب</option>
+  <option value="laptops">💻 اللابتوبات</option>
+  <option value="playstation">🕹️ PlayStation</option>
+  <option value="accessories">🎧 الإكسسوارات</option>
+  <option value="services">🛠️ الخدمات</option>
+  <option value="offers">🔥 العروض</option>
 </select>
 
- <select
-  value={platform}
-  
-  onChange={(e) => setPlatform(e.target.value)}
-  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
->
-  <option value="PS4">🎮 PS4</option>
-  <option value="PS5">🎮 PS5</option>
+{(category === "games" || category === "playstation" || category === "laptops") && (
+  <select
+    value={platform}
+    onChange={(e) => setPlatform(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+  >
+    <option value="PS4">🎮 PS4</option>
+    <option value="PS5">🎮 PS5</option>
 
-  {category === "games" && (
-    <option value="PC">💻 PC</option>
-  )}
-</select>
-{(category === "games" || category === "playstation") && (
+    {category === "games" && (
+      <option value="PC">💻 PC</option>
+    )}
+  </select>
+)}
+
+{(category === "games" ||
+  category === "playstation" ||
+  category === "laptops") && (
   <input
     type="text"
-    placeholder="🎥 رابط الفيديو (YouTube)"
+    placeholder="🎥 رابط المراجعة أو الإعلان"
     value={videoUrl}
     onChange={(e) => setVideoUrl(e.target.value)}
     className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
   />
 )}
+
 {category === "games" && (
   <input
     type="number"
@@ -405,6 +425,14 @@ setEditingId(null);
   />
 )}
 
+<input
+  type="number"
+  placeholder="💰 السعر بالجنيه"
+  value={price}
+  onChange={(e) => setPrice(e.target.value)}
+  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+  min="0"
+/>
           <input
             type="file"
             accept="image/*"
@@ -428,10 +456,12 @@ setEditingId(null);
     ? "جاري الحفظ..."
     : editingId
     ? "حفظ التعديلات"
-    : category === "games"
-    ? "إضافة لعبة"
-    : category === "playstation"
-    ? "إضافة جهاز"
+   : category === "games"
+? "إضافة لعبة"
+: category === "laptops"
+? "إضافة لابتوب"
+: category === "playstation"
+? "إضافة جهاز"
     : category === "accessories"
     ? "إضافة إكسسوار"
     : category === "services"
@@ -461,6 +491,7 @@ setEditingId(null);
   >
     <option value="all">📦 كل الأقسام</option>
     <option value="games">🎮 الألعاب</option>
+    <option value="laptops">💻 اللابتوبات</option>
     <option value="playstation">🕹️ PlayStation</option>
     <option value="accessories">🎧 الإكسسوارات</option>
     <option value="services">🛠️ الخدمات</option>
@@ -531,6 +562,12 @@ setEditingId(null);
       🕹️ PlayStation
     </span>
   )}
+  
+    {game.category === "laptops" && (
+  <span className="bg-purple-600 px-3 py-1 rounded-full text-sm">
+    💻 لابتوب
+  </span>
+)}
 
   {game.category === "accessories" && (
     <span className="bg-yellow-600 px-3 py-1 rounded-full text-sm">

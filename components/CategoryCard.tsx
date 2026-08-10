@@ -14,32 +14,18 @@ export default function CategoryCard({
   return (
     <Link
       href={href}
-      className="
-        group
-        relative
-        overflow-hidden
-        rounded-2xl
-        border border-zinc-800
-        bg-gradient-to-b from-zinc-900 to-black
-        p-6
-        flex flex-col items-center justify-center
-        min-h-[140px] sm:min-h-[180px]
-        transition-all duration-300
-        hover:-translate-y-2
-        hover:border-blue-500
-        hover:shadow-[0_0_30px_rgba(37,99,235,0.35)]
-      "
+      className="group relative shrink-0 w-40 sm:w-44 min-h-[150px] rounded-2xl border border-zinc-800 bg-zinc-950/80 p-5 flex flex-col items-center justify-center overflow-hidden transition-all duration-300 hover:border-blue-500/60 hover:bg-zinc-900 hover:-translate-y-1 hover:shadow-[0_10px_35px_rgba(37,99,235,0.15)]"
     >
       {/* Glow */}
-      <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-all duration-300" />
+      <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition duration-300" />
 
       {/* Icon */}
-      <div className="relative text-5xl sm:text-6xl mb-4 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6">
+      <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 text-4xl mb-4 group-hover:border-blue-500/50 group-hover:scale-105 transition-all duration-300">
         {icon}
       </div>
 
       {/* Title */}
-      <h2 className="relative text-base sm:text-xl font-bold text-white text-center">
+      <h2 className="relative text-base sm:text-lg font-bold text-white text-center whitespace-nowrap group-hover:text-blue-400 transition-colors duration-300">
         {title}
       </h2>
     </Link>

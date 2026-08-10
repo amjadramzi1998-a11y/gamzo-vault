@@ -2,99 +2,75 @@
 
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
-import GameCard from "@/components/GameCard";
+import LaptopCard from "@/components/LaptopCard";
 import { supabase } from "@/lib/supabase";
 
-type Game = {
+type Laptop = {
   id: number;
   name: string;
   image: string;
   category: string;
-  platform: string;
   description?: string;
   price?: number | string;
 };
 
-export default function GamesPage() {
-  const [games, setGames] = useState<Game[]>([]);
-  const [platform, setPlatform] = useState("PS4");
+export default function LaptopsPage() {
+  const [laptops, setLaptops] = useState<Laptop[]>([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadGames();
-  }, [platform]);
+    loadLaptops();
+  }, []);
 
-  async function loadGames() {
+  async function loadLaptops() {
     setLoading(true);
 
     const { data, error } = await supabase
       .from("products")
       .select("*")
-      .eq("category", "games")
-      .eq("platform", platform)
+      .eq("category", "laptops")
       .order("id", { ascending: false });
 
-    console.log("GAMES:", data);
+    console.log("LAPTOPS:", data);
     console.log("ERROR:", error);
 
     if (!error) {
-      setGames((data as Game[]) || []);
+      setLaptops((data as Laptop[]) || []);
     } else {
-      setGames([]);
+      setLaptops([]);
     }
 
     setLoading(false);
   }
 
-  const filteredGames = games.filter((game) => {
+  const filteredLaptops = laptops.filter((laptop) => {
     const searchText = query.toLowerCase().trim();
 
     if (!searchText) return true;
 
     return (
-      game.name?.toLowerCase().includes(searchText) ||
-      game.description?.toLowerCase().includes(searchText)
+      laptop.name?.toLowerCase().includes(searchText) ||
+      laptop.description?.toLowerCase().includes(searchText)
     );
   });
 
-  function changePlatform(newPlatform: string) {
-    setPlatform(newPlatform);
-    setQuery("");
-  }
-
   return (
-    <main className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 py-10">
+    <main className="min-h-screen bg-black text-white">
+      <Header />
+
+      <div className="max-w-7xl mx-auto px-4 py-10">
 
         {/* Title */}
         <h1 className="text-4xl font-bold mb-8">
-          🎮 الألعاب
+          Laptop
         </h1>
-
-        {/* Platforms */}
-        <div className="flex flex-wrap gap-4 mb-6">
-          {["PS4", "PS5", "PC"].map((item) => (
-            <button
-              key={item}
-              onClick={() => changePlatform(item)}
-              className={`px-6 py-3 rounded-xl font-bold transition ${
-                platform === item
-                  ? "bg-blue-600 text-white"
-                  : "bg-zinc-800 hover:bg-zinc-700"
-              }`}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
 
         {/* Search */}
         <div className="relative max-w-2xl mb-10">
-
           <input
             type="text"
-            placeholder={`🔍 ابحث في ألعاب ${platform}...`}
+            placeholder="🔍 ابحث عن لابتوب..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-4 text-white placeholder:text-gray-500 outline-none focus:border-blue-500 transition shadow-lg"
@@ -108,50 +84,39 @@ export default function GamesPage() {
               ×
             </button>
           )}
-
         </div>
 
         {/* Loading */}
         {loading ? (
           <p className="text-gray-400">
-            جاري تحميل ألعاب {platform}...
+            جاري تحميل اللابتوبات...
           </p>
-
-        ) : filteredGames.length === 0 ? (
-
-          /* No Results */
+        ) : filteredLaptops.length === 0 ? (
           <div className="text-center py-16">
-
             <div className="text-5xl mb-4">
-              🔍
+              💻
             </div>
 
             <h2 className="text-xl font-bold text-white">
               {query
-                ? "مفيش ألعاب مطابقة للبحث"
-                : `لا توجد ألعاب في قسم ${platform}`}
+                ? "مفيش لابتوبات مطابقة للبحث"
+                : "لا توجد لابتوبات حاليًا"}
             </h2>
 
             {query && (
               <p className="text-gray-400 mt-2">
-                جرب اسم لعبة مختلف
+                جرب اسم لابتوب مختلف
               </p>
             )}
-
           </div>
-
         ) : (
-
-          /* Products */
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-
-            {filteredGames.map((game) => (
-              <GameCard
-                key={game.id}
-                game={game}
+            {filteredLaptops.map((laptop) => (
+              <LaptopCard
+                key={laptop.id}
+                laptop={laptop}
               />
             ))}
-
           </div>
         )}
 

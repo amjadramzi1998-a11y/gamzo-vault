@@ -1,4 +1,5 @@
 import GameCard from "./GameCard";
+import LaptopCard from "./LaptopCard";
 import Link from "next/link";
 
 interface ProductSectionProps {
@@ -15,25 +16,37 @@ export default function ProductSection({
   if (!products || products.length === 0) return null;
 
   return (
-    <section className="mt-16">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-bold">{title}</h2>
+    <section className="mt-12">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold">
+          {title}
+        </h2>
 
         <Link
           href={href}
-          className="text-blue-500 hover:text-blue-400 font-bold"
+          className="group inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold transition"
         >
-          عرض الكل →
+          المزيد
+          <span className="text-lg transition-transform duration-300 group-hover:translate-x-1">
+            →
+          </span>
         </Link>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-        {products.slice(0, 4).map((product: any) => (
-          <GameCard
-            key={product.id}
-            game={product}
-          />
-        ))}
+        {products.slice(0, 4).map((product: any) =>
+          product.category === "laptops" ? (
+            <LaptopCard
+              key={product.id}
+              laptop={product}
+            />
+          ) : (
+            <GameCard
+              key={product.id}
+              game={product}
+            />
+          )
+        )}
       </div>
     </section>
   );

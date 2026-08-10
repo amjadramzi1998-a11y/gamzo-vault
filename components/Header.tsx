@@ -43,10 +43,12 @@ export default function Header() {
 
           <div>
 
-            <h1 className="text-xl sm:text-2xl font-extrabold text-blue-500">
-              ATOM
-            </h1>
-
+           <h1
+  className="text-xl sm:text-2xl font-black text-blue-500 tracking-widest"
+  style={{ fontFamily: "var(--font-orbitron)" }}
+>
+  ATOM
+</h1>
             <p className="text-[10px] sm:text-xs text-gray-400">
               POWER YOUR WORLD
             </p>
