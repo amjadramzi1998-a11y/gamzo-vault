@@ -1,3 +1,4 @@
+
 import { supabase } from "@/lib/supabase";
 import AddToCartButton from "@/components/AddToCartButton";
 
@@ -6,6 +7,25 @@ type Props = {
     id: string;
   }>;
 };
+
+// مهم مع output: "export"
+export async function generateStaticParams() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("id")
+    .eq("category", "playstation");
+
+  if (error) {
+    console.error("Error loading PlayStation products:", error);
+    return [];
+  }
+
+  return (
+    data?.map((product) => ({
+      id: String(product.id),
+    })) || []
+  );
+}
 
 export default async function PlayStationDetailsPage({ params }: Props) {
   const { id } = await params;
@@ -17,7 +37,6 @@ export default async function PlayStationDetailsPage({ params }: Props) {
     .eq("category", "playstation")
     .single();
 
-
   if (error || !product) {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center">
@@ -28,12 +47,9 @@ export default async function PlayStationDetailsPage({ params }: Props) {
     );
   }
 
-
   return (
     <main className="min-h-screen bg-black text-white">
-
       <div className="max-w-5xl mx-auto px-6 py-10">
-
 
         <div className="rounded-3xl overflow-hidden border border-zinc-800">
           <img
@@ -43,19 +59,15 @@ export default async function PlayStationDetailsPage({ params }: Props) {
           />
         </div>
 
-
         <div className="mt-8">
-
 
           <span className="inline-block bg-green-600 px-4 py-2 rounded-full font-bold">
             🕹️ جهاز PlayStation
           </span>
 
-
           <h1 className="text-5xl font-black mt-6">
             {product.name}
           </h1>
-
 
           {product.description && (
             <p className="text-gray-300 mt-6 text-lg leading-9">
@@ -63,13 +75,9 @@ export default async function PlayStationDetailsPage({ params }: Props) {
             </p>
           )}
 
-
-
           <div className="mt-10 flex flex-col gap-4">
 
-
             <AddToCartButton product={product} />
-
 
             <a
               href={`https://wa.me/201015401976?text=${encodeURIComponent(
@@ -82,15 +90,11 @@ export default async function PlayStationDetailsPage({ params }: Props) {
               🟢 اطلب الجهاز عبر واتساب
             </a>
 
-
           </div>
 
-
         </div>
-
-
       </div>
-
     </main>
   );
 }
+

@@ -1,13 +1,15 @@
-"use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
+import AddToCartButton from "@/components/AddToCartButton";
 import { supabase } from "@/lib/supabase";
-import { addToCart } from "@/lib/cart";
-import toast from "react-hot-toast";
+
+type Props = {
+  params: Promise<{
+    id: string;
+  }>;
+};
 
 type Laptop = {
   id: number;
@@ -19,69 +21,36 @@ type Laptop = {
   video_url?: string;
 };
 
-export default function LaptopDetailsPage() {
-  const params = useParams();
-  const id = params.id as string;
+// مهم جدًا مع output: "export"
+export async function generateStaticParams() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("id")
+    .eq("category", "laptops");
 
-  const [laptop, setLaptop] = useState<Laptop | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (id) {
-      loadLaptop();
-    }
-  }, [id]);
-
-  async function loadLaptop() {
-    setLoading(true);
-
-    const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .eq("id", Number(id))
-      .eq("category", "laptops")
-      .single();
-
-    console.log("LAPTOP DATA:", data);
-    console.log("LAPTOP ERROR:", error);
-
-    if (error || !data) {
-      setLaptop(null);
-    } else {
-      setLaptop(data as Laptop);
-    }
-
-    setLoading(false);
+  if (error) {
+    console.error("Error loading laptop IDs:", error);
+    return [];
   }
 
-  function handleAddToCart() {
-    if (!laptop) return;
+  return (
+    data?.map((laptop) => ({
+      id: String(laptop.id),
+    })) || []
+  );
+}
 
-    addToCart({
-      id: laptop.id,
-      name: laptop.name,
-      image: laptop.image,
-      category: laptop.category,
-    });
+export default async function LaptopDetailsPage({ params }: Props) {
+  const { id } = await params;
 
-    toast.success(`تمت إضافة ${laptop.name} إلى السلة 🛒`);
-  }
+  const { data: laptop, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", Number(id))
+    .eq("category", "laptops")
+    .single();
 
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-black text-white">
-        <Header />
-
-        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-          <p className="text-gray-400 text-lg">
-            جاري تحميل بيانات اللابتوب...
-          </p>
-        </div>
-      </main>
-    );
-  }
-
-  if (!laptop) {
+  if (error || !laptop) {
     return (
       <main className="min-h-screen bg-black text-white">
         <Header />
@@ -141,7 +110,6 @@ export default function LaptopDetailsPage() {
         >
           ← العودة إلى اللابتوبات
         </Link>
-
 
         {/* Main Product Box */}
         <div
@@ -209,7 +177,6 @@ export default function LaptopDetailsPage() {
             />
           </div>
 
-
           {/* Details */}
           <div className="flex flex-col justify-center">
 
@@ -233,16 +200,13 @@ export default function LaptopDetailsPage() {
               💻 Laptop
             </span>
 
-
             {/* Product Name */}
             <h1 className="text-3xl sm:text-5xl font-black leading-tight mb-6">
               {laptop.name}
             </h1>
 
-
             {/* Price */}
             <div className="mb-8">
-
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl sm:text-5xl font-black text-blue-400 tracking-tight">
                   {laptop.price}
@@ -252,9 +216,7 @@ export default function LaptopDetailsPage() {
                   جنيه
                 </span>
               </div>
-
             </div>
-
 
             {/* Description */}
             <div className="mb-8">
@@ -279,49 +241,8 @@ export default function LaptopDetailsPage() {
 
             </div>
 
-
             {/* Add To Cart */}
-            <button
-              onClick={handleAddToCart}
-              className="
-                group
-                relative
-                overflow-hidden
-                w-full
-                bg-blue-600
-                hover:bg-blue-500
-                py-4
-                rounded-xl
-                font-bold
-                text-lg
-                transition-all
-                duration-300
-                shadow-[0_0_20px_rgba(37,99,235,0.25)]
-                hover:shadow-[0_0_30px_rgba(37,99,235,0.45)]
-                hover:-translate-y-1
-                active:scale-95
-              "
-            >
-              <span className="relative z-10">
-                🛒 أضف اللابتوب للسلة
-              </span>
-
-              <span
-                className="
-                  absolute
-                  inset-0
-                  -translate-x-full
-                  group-hover:translate-x-full
-                  transition-transform
-                  duration-700
-                  bg-gradient-to-r
-                  from-transparent
-                  via-white/20
-                  to-transparent
-                "
-              />
-            </button>
-
+            <AddToCartButton product={laptop} />
 
             {/* Video Review */}
             {laptop.video_url && (
@@ -352,9 +273,9 @@ export default function LaptopDetailsPage() {
             )}
 
           </div>
-
         </div>
       </div>
     </main>
   );
 }
+

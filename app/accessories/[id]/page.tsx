@@ -1,3 +1,4 @@
+
 import { supabase } from "@/lib/supabase";
 import AddToCartButton from "@/components/AddToCartButton";
 
@@ -6,6 +7,25 @@ type Props = {
     id: string;
   }>;
 };
+
+// مهم مع Next.js output: "export"
+export async function generateStaticParams() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("id")
+    .eq("category", "accessories");
+
+  if (error) {
+    console.error("Error loading accessories:", error);
+    return [];
+  }
+
+  return (
+    data?.map((product) => ({
+      id: String(product.id),
+    })) || []
+  );
+}
 
 export default async function AccessoriesDetailsPage({ params }: Props) {
   const { id } = await params;
@@ -17,7 +37,6 @@ export default async function AccessoriesDetailsPage({ params }: Props) {
     .eq("category", "accessories")
     .single();
 
-
   if (error || !product) {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center">
@@ -28,69 +47,69 @@ export default async function AccessoriesDetailsPage({ params }: Props) {
     );
   }
 
-
   return (
     <main className="min-h-screen bg-black text-white">
-
       <div className="max-w-5xl mx-auto px-6 py-10">
 
-
-        <div className="rounded-3xl overflow-hidden border border-zinc-800">
+        {/* Product Image */}
+        <div className="rounded-3xl overflow-hidden border border-zinc-800 bg-zinc-950">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full max-h-[550px] object-cover"
+            className="w-full max-h-[550px] object-contain"
           />
         </div>
 
-
+        {/* Product Info */}
         <div className="mt-8">
 
-
+          {/* Category */}
           <span className="inline-block bg-yellow-600 px-4 py-2 rounded-full font-bold">
             🎧 إكسسوار
           </span>
 
-
+          {/* Name */}
           <h1 className="text-5xl font-black mt-6">
             {product.name}
           </h1>
 
-
+          {/* Description */}
           {product.description && (
             <p className="text-gray-300 mt-6 text-lg leading-9">
               {product.description}
             </p>
           )}
 
-
-
+          {/* Buttons */}
           <div className="mt-10 flex flex-col gap-4">
-
 
             <AddToCartButton product={product} />
 
-
             <a
               href={`https://wa.me/201015401976?text=${encodeURIComponent(
-                product.name
+                `مرحباً، أريد طلب الإكسسوار: ${product.name}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-green-600 hover:bg-green-700 py-4 rounded-xl text-center text-xl font-bold transition"
+              className="
+                w-full
+                bg-green-600
+                hover:bg-green-700
+                py-4
+                rounded-xl
+                text-center
+                text-xl
+                font-bold
+                transition
+              "
             >
               🟢 اطلب الإكسسوار عبر واتساب
             </a>
 
-
           </div>
 
-
         </div>
-
-
       </div>
-
     </main>
   );
 }

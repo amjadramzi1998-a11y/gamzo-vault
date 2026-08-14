@@ -1,3 +1,4 @@
+
 import { supabase } from "@/lib/supabase";
 import AddToCartButton from "@/components/AddToCartButton";
 
@@ -6,6 +7,25 @@ type Props = {
     id: string;
   }>;
 };
+
+// مهم مع output: "export"
+export async function generateStaticParams() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("id")
+    .eq("category", "offers");
+
+  if (error) {
+    console.error("Error loading offers:", error);
+    return [];
+  }
+
+  return (
+    data?.map((offer) => ({
+      id: String(offer.id),
+    })) || []
+  );
+}
 
 export default async function OffersDetailsPage({ params }: Props) {
   const { id } = await params;
@@ -130,3 +150,4 @@ export default async function OffersDetailsPage({ params }: Props) {
     </main>
   );
 }
+

@@ -2,11 +2,32 @@ import { supabase } from "@/lib/supabase";
 import AddToCartButton from "@/components/AddToCartButton";
 import Rating from "@/components/Rating";
 import TrailerButton from "@/components/TrailerButton";
+
 type Props = {
   params: Promise<{
     id: string;
   }>;
 };
+
+// مهم مع output: "export"
+// بنجيب IDs الألعاب الموجودة فقط وقت الـ build
+export async function generateStaticParams() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("id")
+    .eq("category", "games");
+
+  if (error) {
+    console.error("Error loading games:", error);
+    return [];
+  }
+
+  return (
+    data?.map((game) => ({
+      id: String(game.id),
+    })) || []
+  );
+}
 
 export default async function GamePage({ params }: Props) {
   const { id } = await params;
@@ -15,37 +36,23 @@ export default async function GamePage({ params }: Props) {
     .from("products")
     .select("*")
     .eq("id", Number(id))
+    .eq("category", "games")
     .single();
-
 
   if (error || !product) {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center">
         <h1 className="text-3xl font-bold">
-          المنتج غير موجود
+          اللعبة غير موجودة
         </h1>
       </main>
     );
   }
 
-
-  const typeName =
-    product.category === "games"
-      ? "🎮 لعبة"
-      : product.category === "playstation"
-      ? "🕹️ جهاز PlayStation"
-      : product.category === "accessories"
-      ? "🎧 إكسسوار"
-      : product.category === "services"
-      ? "🛠️ خدمة"
-      : "🔥 عرض";
-
-
   return (
     <main className="min-h-screen bg-black text-white">
 
       <div className="max-w-5xl mx-auto px-6 py-10">
-
 
         <div className="rounded-3xl overflow-hidden border border-zinc-800">
           <img
@@ -55,19 +62,15 @@ export default async function GamePage({ params }: Props) {
           />
         </div>
 
-
         <div className="mt-8">
 
-
           <span className="inline-block bg-blue-600 px-4 py-2 rounded-full font-bold">
-            {typeName}
+            🎮 لعبة
           </span>
-
 
           <h1 className="text-5xl font-black mt-6">
             {product.name}
           </h1>
-
 
           {product.platform && (
             <p className="text-blue-400 mt-4 text-xl font-bold">
@@ -75,23 +78,23 @@ export default async function GamePage({ params }: Props) {
             </p>
           )}
 
-
           {product.description && (
             <p className="text-gray-300 mt-6 text-lg leading-9">
               {product.description}
             </p>
           )}
+
           <Rating
-  productId={product.id}
-  average={product.rating_average || 0}
-  count={product.rating_count || 0}
-/>
+            productId={product.id}
+            average={product.rating_average || 0}
+            count={product.rating_count || 0}
+          />
 
-<TrailerButton videoUrl={product.video_url} />
+          <TrailerButton videoUrl={product.video_url} />
 
-<div className="mt-10 flex flex-col gap-4">
+          <div className="mt-10 flex flex-col gap-4">
+
             <AddToCartButton product={product} />
-
 
             <a
               href={`https://wa.me/201015401976?text=${encodeURIComponent(
@@ -104,12 +107,9 @@ export default async function GamePage({ params }: Props) {
               🟢 اطلب عبر واتساب
             </a>
 
-
           </div>
 
-
         </div>
-
 
       </div>
 

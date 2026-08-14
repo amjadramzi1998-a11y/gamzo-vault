@@ -11,10 +11,20 @@ type Laptop = {
   image: string;
   category: string;
   price?: number | string;
+  stock?: number;
 };
 
 export default function LaptopCard({ laptop }: { laptop: Laptop }) {
+  const stock = Number(laptop.stock ?? 0);
+  const isOutOfStock = stock <= 0;
+  const isLastItem = stock === 1;
+
   function handleAddToCart() {
+    if (isOutOfStock) {
+      toast.error("اللابتوب غير متاح حاليًا ❌");
+      return;
+    }
+
     addToCart({
       id: laptop.id,
       name: laptop.name,
@@ -40,6 +50,36 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
         hover:shadow-[0_15px_40px_rgba(37,99,235,0.15)]
       "
     >
+
+      {/* Stock Badge */}
+      <div
+        className={`
+          absolute
+          top-3
+          left-3
+          z-20
+          text-white
+          text-xs
+          font-black
+          px-3
+          py-2
+          rounded-xl
+          shadow-lg
+          ${
+            isOutOfStock
+              ? "bg-red-600"
+              : isLastItem
+              ? "bg-orange-500"
+              : "bg-green-600"
+          }
+        `}
+      >
+        {isOutOfStock
+          ? "❌ غير متاح"
+          : isLastItem
+          ? "⚡ آخر قطعة"
+          : "✅ متاح"}
+      </div>
 
       {/* Laptop Image */}
       <Link href={`/laptops/${laptop.id}`}>
@@ -80,7 +120,6 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
         </div>
       </Link>
 
-
       {/* Content */}
       <div className="p-5">
 
@@ -99,7 +138,6 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
           {laptop.name}
         </h2>
 
-
         {/* Price */}
         <div className="mt-4 flex items-baseline gap-2">
 
@@ -113,27 +151,40 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
 
         </div>
 
+       {/* Stock Status */}
+{!isOutOfStock && (
+  <p
+    className={`text-sm font-bold mt-2 ${
+      isLastItem ? "text-orange-400" : "text-green-400"
+    }`}
+  >
+    {isLastItem ? "⚡ آخر قطعة" : "🟢 متاح الآن"}
+  </p>
+)}
 
         {/* Add To Cart */}
         <button
           onClick={handleAddToCart}
-          className="
+          disabled={isOutOfStock}
+          className={`
             w-full
             mt-5
-            bg-blue-600
-            hover:bg-blue-500
             py-3
             rounded-xl
             font-bold
             transition-all
             duration-300
-            hover:shadow-[0_0_20px_rgba(37,99,235,0.35)]
-            active:scale-95
-          "
+            ${
+              isOutOfStock
+                ? "bg-zinc-800 text-gray-500 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-500 hover:shadow-[0_0_20px_rgba(37,99,235,0.35)] active:scale-95"
+            }
+          `}
         >
-          🛒 أضف للسلة
+          {isOutOfStock
+            ? "❌ غير متاح حاليًا"
+            : "🛒 أضف للسلة"}
         </button>
-
 
         {/* View Laptop */}
         <Link

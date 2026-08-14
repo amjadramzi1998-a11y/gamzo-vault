@@ -1,3 +1,4 @@
+
 import { supabase } from "@/lib/supabase";
 import AddToCartButton from "@/components/AddToCartButton";
 
@@ -6,6 +7,26 @@ type Props = {
     id: string;
   }>;
 };
+
+// مهم جدًا مع output: "export"
+// بيجيب كل IDs الخاصة بالخدمات وقت الـ build
+export async function generateStaticParams() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("id")
+    .eq("category", "services");
+
+  if (error) {
+    console.error("Error loading services:", error);
+    return [];
+  }
+
+  return (
+    data?.map((service) => ({
+      id: String(service.id),
+    })) || []
+  );
+}
 
 export default async function ServicesDetailsPage({ params }: Props) {
   const { id } = await params;
@@ -17,7 +38,6 @@ export default async function ServicesDetailsPage({ params }: Props) {
     .eq("category", "services")
     .single();
 
-
   if (error || !product) {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center">
@@ -28,12 +48,10 @@ export default async function ServicesDetailsPage({ params }: Props) {
     );
   }
 
-
   return (
     <main className="min-h-screen bg-black text-white">
 
       <div className="max-w-5xl mx-auto px-6 py-10">
-
 
         <div className="rounded-3xl overflow-hidden border border-zinc-800">
           <img
@@ -43,19 +61,15 @@ export default async function ServicesDetailsPage({ params }: Props) {
           />
         </div>
 
-
         <div className="mt-8">
-
 
           <span className="inline-block bg-purple-600 px-4 py-2 rounded-full font-bold">
             🛠️ خدمة
           </span>
 
-
           <h1 className="text-5xl font-black mt-6">
             {product.name}
           </h1>
-
 
           {product.description && (
             <p className="text-gray-300 mt-6 text-lg leading-9">
@@ -63,17 +77,13 @@ export default async function ServicesDetailsPage({ params }: Props) {
             </p>
           )}
 
-
-
           <div className="mt-10 flex flex-col gap-4">
-
 
             <AddToCartButton product={product} />
 
-
             <a
               href={`https://wa.me/201015401976?text=${encodeURIComponent(
-                product.name
+                `مرحباً، أريد طلب الخدمة: ${product.name}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -82,15 +92,13 @@ export default async function ServicesDetailsPage({ params }: Props) {
               🟢 اطلب الخدمة عبر واتساب
             </a>
 
-
           </div>
 
-
         </div>
-
 
       </div>
 
     </main>
   );
 }
+

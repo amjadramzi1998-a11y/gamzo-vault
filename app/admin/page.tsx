@@ -12,6 +12,7 @@ export default function AdminPage() {
 
   const [name, setName] = useState("");
  const [price, setPrice] = useState("");
+ const [stock, setStock] = useState("0");
 const [oldPrice, setOldPrice] = useState("");
   const [platform, setPlatform] = useState("PS4");
   const [category, setCategory] = useState("games");
@@ -90,8 +91,10 @@ function editGame(game: any) {
 
   setVideoUrl(game.video_url || "");
   setName(game.name);
-  setPrice(game.price?.toString() || "");
-  setOldPrice(game.old_price?.toString() || "");
+ setPrice(game.price?.toString() || "");
+ setStock(game.stock?.toString() || "0");
+setOldPrice(game.old_price?.toString() || "");
+setStock(game.stock?.toString() || "0");
   setCategory(game.category);
   setPlatform(game.platform || "PS4");
   setDescription(game.description || "");
@@ -212,6 +215,7 @@ if (image) {
 
   // سعر البيع الحالي
   price: Number(price) || null,
+  stock: Number(stock) || 0,
 
   // السعر قبل الخصم - للعروض فقط
   old_price:
@@ -251,6 +255,7 @@ if (image) {
 
   // سعر البيع الحالي
   price: Number(price) || null,
+  stock: Number(stock) || 0,
 
   // السعر قبل الخصم - للعروض فقط
   old_price:
@@ -294,6 +299,7 @@ setName("");
 setPrice("");
 setOldPrice("");
 setPlatform("PS4");
+setStock("0");
 setDescription("");
 setSize("");
 setImage(null);
@@ -466,6 +472,15 @@ setEditingId(null);
     placeholder="💰 السعر بالجنيه"
     value={price}
     onChange={(e) => setPrice(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+    min="0"
+  />
+
+  <input
+    type="number"
+    placeholder="📦 الكمية في المخزون"
+    value={stock}
+    onChange={(e) => setStock(e.target.value)}
     className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
     min="0"
   />

@@ -14,6 +14,9 @@ type Product = {
   size?: number;
   rating_average?: number;
   rating_count?: number;
+  stock?: number;
+  price?: number | string;
+  old_price?: number | string;
 };
 
 export default function GameCard({ game }: { game: Product }) {
@@ -50,13 +53,35 @@ export default function GameCard({ game }: { game: Product }) {
       ? "🛠️ خدمة"
       : "🔥 عرض";
 
+  const stock = Number(game.stock ?? 0);
+  const isOutOfStock = stock <= 0;
+  const isLastItem = stock === 1;
+
+  const currentPrice = Number(game.price ?? 0);
+  const oldPrice = Number(game.old_price ?? 0);
+
+  const hasDiscount =
+    game.category === "offers" &&
+    oldPrice > 0 &&
+    currentPrice > 0 &&
+    oldPrice > currentPrice;
+
+  const discount = hasDiscount
+    ? Math.round(((oldPrice - currentPrice) / oldPrice) * 100)
+    : 0;
+
   function handleAddToCart() {
-    addToCart({
-      id: game.id,
-      name: game.name,
-      image: game.image,
-      category: game.category,
-    });
+    if (isOutOfStock) {
+      toast.error("المنتج غير متاح حاليًا ❌");
+      return;
+    }
+
+   addToCart({
+  id: game.id,
+  name: game.name,
+  image: game.image,
+  category: game.category,
+});
 
     toast.success(`تمت إضافة ${game.name} إلى السلة 🛒`);
   }
@@ -77,7 +102,6 @@ export default function GameCard({ game }: { game: Product }) {
         hover:shadow-[0_15px_40px_rgba(37,99,235,0.15)]
       "
     >
-
       {/* Special Offer Ribbon */}
       {game.category === "offers" && (
         <div
@@ -101,11 +125,91 @@ export default function GameCard({ game }: { game: Product }) {
         </div>
       )}
 
+      {/* Stock Badge */}
+      {isOutOfStock ? (
+        <div
+          className="
+            absolute
+            top-3
+            left-3
+            z-30
+            bg-red-600
+            text-white
+            text-xs
+            font-black
+            px-3
+            py-2
+            rounded-xl
+            shadow-lg
+          "
+        >
+          ❌ غير متاح
+        </div>
+      ) : isLastItem ? (
+        <div
+          className="
+            absolute
+            top-3
+            left-3
+            z-30
+            bg-orange-500
+            text-white
+            text-xs
+            font-black
+            px-3
+            py-2
+            rounded-xl
+            shadow-lg
+          "
+        >
+          ⚡ آخر قطعة
+        </div>
+      ) : (
+        <div
+          className="
+            absolute
+            top-3
+            left-3
+            z-30
+            bg-green-600
+            text-white
+            text-xs
+            font-black
+            px-3
+            py-2
+            rounded-xl
+            shadow-lg
+          "
+        >
+          ✅ متاح
+        </div>
+      )}
+
+      {/* Discount Badge */}
+      {hasDiscount && (
+        <div
+          className="
+            absolute
+            top-16
+            right-3
+            z-30
+            bg-red-600
+            text-white
+            text-xs
+            font-black
+            px-3
+            py-2
+            rounded-xl
+            shadow-lg
+          "
+        >
+          خصم {discount}%
+        </div>
+      )}
 
       {/* Product Image */}
       <Link href={link}>
         <div className="relative w-full h-64 overflow-hidden bg-zinc-900">
-
           <Image
             src={game.image}
             alt={game.name}
@@ -120,7 +224,6 @@ export default function GameCard({ game }: { game: Product }) {
             unoptimized
           />
 
-
           {/* Bottom Gradient */}
           <div
             className="
@@ -133,7 +236,6 @@ export default function GameCard({ game }: { game: Product }) {
               pointer-events-none
             "
           />
-
 
           {/* Blue Edge Glow */}
           <div
@@ -149,7 +251,6 @@ export default function GameCard({ game }: { game: Product }) {
               pointer-events-none
             "
           />
-
 
           {/* Size - Games Only */}
           {game.category === "games" && game.size && (
@@ -171,7 +272,6 @@ export default function GameCard({ game }: { game: Product }) {
               💾 {game.size} GB
             </div>
           )}
-
 
           {/* Rating - Games Only */}
           {game.category === "games" && (
@@ -210,14 +310,11 @@ export default function GameCard({ game }: { game: Product }) {
               )}
             </div>
           )}
-
         </div>
       </Link>
 
-
       {/* Content */}
       <div className="p-5">
-
 
         {/* Category */}
         <span
@@ -237,7 +334,6 @@ export default function GameCard({ game }: { game: Product }) {
           {categoryText}
         </span>
 
-
         {/* Product Name */}
         <h2
           className="
@@ -253,7 +349,6 @@ export default function GameCard({ game }: { game: Product }) {
           {game.name}
         </h2>
 
-
         {/* Platform */}
         {game.platform && (
           <p className="text-blue-400 font-bold mt-2">
@@ -261,27 +356,52 @@ export default function GameCard({ game }: { game: Product }) {
           </p>
         )}
 
+        {/* Price */}
+        {game.price != null && (
+          <div className="mt-3">
+
+            {hasDiscount && (
+              <p className="text-gray-500 text-sm line-through">
+                {oldPrice.toLocaleString("en-US")} جنيه
+              </p>
+            )}
+
+            <p className="text-2xl font-black text-blue-400">
+              {currentPrice.toLocaleString("en-US")} جنيه
+            </p>
+
+            {hasDiscount && (
+              <p className="text-green-400 text-xs font-bold mt-1">
+                وفر {(oldPrice - currentPrice).toLocaleString("en-US")} جنيه
+              </p>
+            )}
+
+          </div>
+        )}
 
         {/* Add To Cart */}
         <button
           onClick={handleAddToCart}
-          className="
+          disabled={isOutOfStock}
+          className={`
             w-full
             mt-5
-            bg-blue-600
-            hover:bg-blue-500
             py-3
             rounded-xl
             font-bold
             transition-all
             duration-300
-            hover:shadow-[0_0_20px_rgba(37,99,235,0.35)]
-            active:scale-95
-          "
+            ${
+              isOutOfStock
+                ? "bg-zinc-800 text-gray-500 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-500 hover:shadow-[0_0_20px_rgba(37,99,235,0.35)] active:scale-95"
+            }
+          `}
         >
-          🛒 أضف للسلة
+          {isOutOfStock
+            ? "❌ غير متاح حاليًا"
+            : "🛒 أضف للسلة"}
         </button>
-
 
         {/* View Product */}
         <Link
@@ -309,7 +429,6 @@ export default function GameCard({ game }: { game: Product }) {
         </Link>
 
       </div>
-
     </div>
   );
 }

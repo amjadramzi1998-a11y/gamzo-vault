@@ -3,23 +3,44 @@
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import { getCart, removeFromCart, clearCart } from "@/lib/cart";
+import { supabase } from "@/lib/supabase";
 
 export default function CartPage() {
   const [cart, setCart] = useState<any[]>([]);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     setCart(getCart());
   }, []);
-
 
   function removeItem(id: number) {
     removeFromCart(id);
     setCart(getCart());
   }
 
+  async function sendWhatsApp() {
+    if (cart.length === 0 || sending) return;
 
-  function sendWhatsApp() {
-    const message = `
+    setSending(true);
+
+    try {
+      // تسجيل الطلب في Supabase
+      const { error } = await supabase
+        .from("orders")
+        .insert({
+          items: cart,
+          status: "pending",
+        });
+
+      if (error) {
+        console.error("ORDER ERROR:", error);
+        alert("حصل خطأ أثناء تسجيل الطلب");
+        setSending(false);
+        return;
+      }
+
+      // تجهيز رسالة واتساب
+      const message = `
 طلب جديد من ATOM 🔥
 
 ${cart
@@ -29,18 +50,22 @@ ${cart
 شكراً لكم 🕹️
 `;
 
-    window.open(
-      `https://wa.me/201067981310?text=${encodeURIComponent(message)}`,
-      "_blank"
-    );
+      // فتح واتساب
+      window.open(
+        `https://wa.me/201067981310?text=${encodeURIComponent(message)}`,
+        "_blank"
+      );
+    } catch (error) {
+      console.error("ORDER ERROR:", error);
+      alert("حصل خطأ أثناء إرسال الطلب");
+    } finally {
+      setSending(false);
+    }
   }
-
 
   return (
     <main className="min-h-screen bg-black text-white">
-
       <Header />
-
 
       <div className="max-w-5xl mx-auto px-6 py-10">
 
@@ -49,7 +74,6 @@ ${cart
           <h1 className="text-4xl font-bold">
             🛒 سلة الطلبات
           </h1>
-
 
           {cart.length > 0 && (
             <button
@@ -64,8 +88,6 @@ ${cart
           )}
 
         </div>
-
-
 
         {cart.length === 0 ? (
 
@@ -94,14 +116,11 @@ ${cart
                       className="w-20 h-20 rounded-xl object-cover"
                     />
 
-
                     <h2 className="text-lg sm:text-xl font-bold">
                       {item.name}
                     </h2>
 
                   </div>
-
-
 
                   <button
                     onClick={() => removeItem(item.id)}
@@ -110,22 +129,25 @@ ${cart
                     حذف
                   </button>
 
-
                 </div>
 
               ))}
 
             </div>
 
-
-
             <button
               onClick={sendWhatsApp}
-              className="w-full mt-8 bg-green-600 hover:bg-green-700 py-4 rounded-xl text-xl font-bold transition"
+              disabled={sending}
+              className={`w-full mt-8 py-4 rounded-xl text-xl font-bold transition ${
+                sending
+                  ? "bg-zinc-700 text-gray-400 cursor-not-allowed"
+                  : "bg-green-600 hover:bg-green-700"
+              }`}
             >
-              🟢 إرسال الطلب عبر واتساب
+              {sending
+                ? "⏳ جاري تسجيل الطلب..."
+                : "🟢 إرسال الطلب عبر واتساب"}
             </button>
-
 
           </>
 
