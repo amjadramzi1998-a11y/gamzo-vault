@@ -17,7 +17,6 @@ export default async function OffersDetailsPage({ params }: Props) {
     .eq("category", "offers")
     .single();
 
-
   if (error || !product) {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center">
@@ -28,14 +27,24 @@ export default async function OffersDetailsPage({ params }: Props) {
     );
   }
 
+  const currentPrice = Number(product.price);
+  const oldPrice = Number(product.old_price);
+
+  const hasDiscount =
+    oldPrice > 0 &&
+    currentPrice > 0 &&
+    oldPrice > currentPrice;
+
+  const discount = hasDiscount
+    ? Math.round(((oldPrice - currentPrice) / oldPrice) * 100)
+    : 0;
 
   return (
     <main className="min-h-screen bg-black text-white">
-
       <div className="max-w-5xl mx-auto px-6 py-10">
 
-
-        <div className="rounded-3xl overflow-hidden border border-zinc-800">
+        {/* Product Image */}
+        <div className="rounded-3xl overflow-hidden border border-zinc-800 bg-zinc-950">
           <img
             src={product.image}
             alt={product.name}
@@ -43,37 +52,69 @@ export default async function OffersDetailsPage({ params }: Props) {
           />
         </div>
 
-
+        {/* Product Info */}
         <div className="mt-8">
 
-
+          {/* Offer Badge */}
           <span className="inline-block bg-red-600 px-4 py-2 rounded-full font-bold">
             🔥 عرض خاص
           </span>
 
-
-          <h1 className="text-5xl font-black mt-6">
+          {/* Product Name */}
+          <h1 className="text-4xl sm:text-5xl font-black mt-6">
             {product.name}
           </h1>
 
-
+          {/* Description */}
           {product.description && (
             <p className="text-gray-300 mt-6 text-lg leading-9">
               {product.description}
             </p>
           )}
 
+          {/* Price */}
+          <div className="mt-8">
 
+            {/* Old Price */}
+            {hasDiscount && (
+              <p className="text-gray-500 text-lg sm:text-xl line-through">
+                {oldPrice.toLocaleString("en-US")} جنيه
+              </p>
+            )}
 
+            {/* Current Price */}
+            {product.price != null && (
+              <p className="text-4xl sm:text-5xl font-black text-blue-400 mt-1">
+                {currentPrice.toLocaleString("en-US")} جنيه
+              </p>
+            )}
+
+            {/* Discount */}
+            {hasDiscount && (
+              <div className="flex items-center gap-3 mt-3">
+
+                <span className="inline-block bg-red-600/15 border border-red-500/30 text-red-500 px-3 py-1 rounded-lg font-bold">
+                  🔥 خصم {discount}%
+                </span>
+
+                <span className="text-gray-400 text-sm">
+                  وفر{" "}
+                  {(oldPrice - currentPrice).toLocaleString("en-US")} جنيه
+                </span>
+
+              </div>
+            )}
+
+          </div>
+
+          {/* Buttons */}
           <div className="mt-10 flex flex-col gap-4">
-
 
             <AddToCartButton product={product} />
 
-
             <a
               href={`https://wa.me/201015401976?text=${encodeURIComponent(
-                product.name
+                `مرحبًا، أريد طلب العرض: ${product.name} - السعر ${currentPrice} جنيه`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -82,15 +123,10 @@ export default async function OffersDetailsPage({ params }: Props) {
               🟢 اطلب العرض عبر واتساب
             </a>
 
-
           </div>
 
-
         </div>
-
-
       </div>
-
     </main>
   );
 }

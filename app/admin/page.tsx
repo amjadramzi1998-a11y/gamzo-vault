@@ -11,7 +11,8 @@ export default function AdminPage() {
   const [checking, setChecking] = useState(true);
 
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
+ const [price, setPrice] = useState("");
+const [oldPrice, setOldPrice] = useState("");
   const [platform, setPlatform] = useState("PS4");
   const [category, setCategory] = useState("games");
   const [description, setDescription] = useState("");
@@ -86,9 +87,11 @@ async function deleteComment(id: number) {
 
 function editGame(game: any) {
   setEditingId(game.id);
-setVideoUrl(game.video_url || "");
+
+  setVideoUrl(game.video_url || "");
   setName(game.name);
   setPrice(game.price?.toString() || "");
+  setOldPrice(game.old_price?.toString() || "");
   setCategory(game.category);
   setPlatform(game.platform || "PS4");
   setDescription(game.description || "");
@@ -100,6 +103,7 @@ setVideoUrl(game.video_url || "");
     top: 0,
     behavior: "smooth",
   });
+
   
 
   setEditingId(game.id);
@@ -205,12 +209,23 @@ if (image) {
 .update({
   name,
   image: imageUrl,
+
+  // سعر البيع الحالي
   price: Number(price) || null,
-  category,
-  platform:
-    category === "games" || category === "playstation"
-      ? platform
+
+  // السعر قبل الخصم - للعروض فقط
+  old_price:
+    category === "offers"
+      ? Number(oldPrice) || null
       : null,
+
+  category,
+ platform:
+  category === "games" ||
+  category === "playstation" ||
+  category === "offers"
+    ? platform
+    : null,
   description,
   size: category === "games" ? Number(size) || null : null,
   video_url:
@@ -233,20 +248,38 @@ if (image) {
 .insert({
   name,
   image: imageUrl,
+
+  // سعر البيع الحالي
   price: Number(price) || null,
-  category,
-  platform:
-    category === "games" || category === "playstation"
-      ? platform
+
+  // السعر قبل الخصم - للعروض فقط
+  old_price:
+    category === "offers"
+      ? Number(oldPrice) || null
       : null,
-  description,
-  size: category === "games" ? Number(size) || null : null,
-  video_url:
+
+  category,
+
+  platform:
   category === "games" ||
   category === "playstation" ||
-  category === "laptops"
-    ? videoUrl
+  category === "offers"
+    ? platform
     : null,
+
+  description,
+
+  size:
+    category === "games"
+      ? Number(size) || null
+      : null,
+
+  video_url:
+    category === "games" ||
+    category === "playstation" ||
+    category === "laptops"
+      ? videoUrl
+      : null,
 })
 
   if (error) throw error;
@@ -259,6 +292,7 @@ if (image) {
 
 setName("");
 setPrice("");
+setOldPrice("");
 setPlatform("PS4");
 setDescription("");
 setSize("");
@@ -425,14 +459,29 @@ setEditingId(null);
   />
 )}
 
-<input
-  type="number"
-  placeholder="💰 السعر بالجنيه"
-  value={price}
-  onChange={(e) => setPrice(e.target.value)}
-  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
-  min="0"
-/>
+<div className="space-y-3">
+
+  <input
+    type="number"
+    placeholder="💰 السعر بالجنيه"
+    value={price}
+    onChange={(e) => setPrice(e.target.value)}
+    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+    min="0"
+  />
+
+  {category === "offers" && (
+    <input
+      type="number"
+      placeholder="🏷️ السعر قبل الخصم"
+      value={oldPrice}
+      onChange={(e) => setOldPrice(e.target.value)}
+      className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-4"
+      min="0"
+    />
+  )}
+
+</div>
           <input
             type="file"
             accept="image/*"

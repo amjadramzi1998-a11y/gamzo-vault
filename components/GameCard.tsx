@@ -62,82 +62,248 @@ export default function GameCard({ game }: { game: Product }) {
   }
 
   return (
-    <div className="relative bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-blue-500 transition duration-300 group">
+    <div
+      className="
+        relative
+        group
+        bg-zinc-950
+        border border-zinc-800
+        rounded-2xl
+        overflow-hidden
+        transition-all
+        duration-300
+        hover:-translate-y-2
+        hover:border-blue-500/50
+        hover:shadow-[0_15px_40px_rgba(37,99,235,0.15)]
+      "
+    >
 
+      {/* Special Offer Ribbon */}
       {game.category === "offers" && (
-        <div className="absolute top-3 -right-11 rotate-45 bg-red-600 text-white text-[10px] font-bold py-1 w-32 text-center shadow-lg z-20">
+        <div
+          className="
+            absolute
+            top-3
+            -right-11
+            rotate-45
+            bg-blue-600
+            text-white
+            text-[10px]
+            font-bold
+            py-1
+            w-32
+            text-center
+            shadow-lg
+            z-20
+          "
+        >
           خصم خاص
         </div>
       )}
 
-      <div className="relative w-full h-60 overflow-hidden">
-        <Image
-          src={game.image}
-          alt={game.name}
-          fill
-          className="object-cover group-hover:scale-110 transition duration-500"
-          unoptimized
-        />
 
-        {/* الحجم - للألعاب فقط */}
-        {game.category === "games" && game.size && (
-          <div className="absolute top-3 left-3 bg-black/70 backdrop-blur px-3 py-1 rounded-full text-xs font-bold border border-zinc-700">
-            💾 {game.size} GB
-          </div>
-        )}
+      {/* Product Image */}
+      <Link href={link}>
+        <div className="relative w-full h-64 overflow-hidden bg-zinc-900">
 
-        {/* التقييم - للألعاب فقط */}
-        {game.category === "games" && (
-          <div className="absolute top-3 right-3 bg-black/70 backdrop-blur px-3 py-1 rounded-xl border border-yellow-500 shadow-lg">
-            {Number(game.rating_count) > 0 ? (
-              <>
-                <div className="flex items-center gap-1">
-                  <span className="text-yellow-400">⭐</span>
-                  <span className="text-white font-bold">
-                    {Number(game.rating_average).toFixed(1)}
-                  </span>
-                </div>
+          <Image
+            src={game.image}
+            alt={game.name}
+            fill
+            className="
+              object-contain
+              p-2
+              transition-transform
+              duration-700
+              group-hover:scale-110
+            "
+            unoptimized
+          />
 
-                <p className="text-[10px] text-gray-300 text-center">
-                  ({game.rating_count} تقييم)
+
+          {/* Bottom Gradient */}
+          <div
+            className="
+              absolute
+              inset-0
+              bg-gradient-to-t
+              from-black/45
+              via-transparent
+              to-transparent
+              pointer-events-none
+            "
+          />
+
+
+          {/* Blue Edge Glow */}
+          <div
+            className="
+              absolute
+              inset-0
+              ring-1
+              ring-inset
+              ring-white/5
+              group-hover:ring-blue-500/30
+              transition-all
+              duration-300
+              pointer-events-none
+            "
+          />
+
+
+          {/* Size - Games Only */}
+          {game.category === "games" && game.size && (
+            <div
+              className="
+                absolute
+                top-3
+                left-3
+                bg-black/70
+                backdrop-blur-md
+                px-3
+                py-1
+                rounded-full
+                text-xs
+                font-bold
+                border border-zinc-700
+              "
+            >
+              💾 {game.size} GB
+            </div>
+          )}
+
+
+          {/* Rating - Games Only */}
+          {game.category === "games" && (
+            <div
+              className="
+                absolute
+                top-3
+                right-3
+                bg-black/75
+                backdrop-blur-md
+                px-3
+                py-2
+                rounded-xl
+                border border-blue-500/40
+                shadow-[0_0_15px_rgba(37,99,235,0.12)]
+              "
+            >
+              {Number(game.rating_count) > 0 ? (
+                <>
+                  <div className="flex items-center gap-1">
+                    <span className="text-yellow-400">⭐</span>
+
+                    <span className="text-white font-bold">
+                      {Number(game.rating_average).toFixed(1)}
+                    </span>
+                  </div>
+
+                  <p className="text-[10px] text-gray-300 text-center mt-1">
+                    ({game.rating_count} تقييم)
+                  </p>
+                </>
+              ) : (
+                <p className="text-xs text-white">
+                  ⭐ كن أول من يقيم
                 </p>
-              </>
-            ) : (
-              <p className="text-xs text-white">
-                ⭐ كن أول من يقيم
-              </p>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
 
-      </div>
+        </div>
+      </Link>
 
+
+      {/* Content */}
       <div className="p-5">
 
-        <span className="inline-block bg-blue-600 text-xs px-3 py-1 rounded-full mb-3">
+
+        {/* Category */}
+        <span
+          className="
+            inline-block
+            bg-blue-600/10
+            text-blue-400
+            border border-blue-500/30
+            text-xs
+            px-3
+            py-1
+            rounded-full
+            mb-3
+            font-bold
+          "
+        >
           {categoryText}
         </span>
 
-        <h2 className="text-xl font-bold min-h-[56px]">
+
+        {/* Product Name */}
+        <h2
+          className="
+            text-xl
+            font-bold
+            min-h-[56px]
+            text-white
+            group-hover:text-blue-400
+            transition-colors
+            duration-300
+          "
+        >
           {game.name}
         </h2>
 
+
+        {/* Platform */}
         {game.platform && (
           <p className="text-blue-400 font-bold mt-2">
             🎮 {game.platform}
           </p>
         )}
 
+
+        {/* Add To Cart */}
         <button
           onClick={handleAddToCart}
-          className="w-full mt-5 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition active:scale-95"
+          className="
+            w-full
+            mt-5
+            bg-blue-600
+            hover:bg-blue-500
+            py-3
+            rounded-xl
+            font-bold
+            transition-all
+            duration-300
+            hover:shadow-[0_0_20px_rgba(37,99,235,0.35)]
+            active:scale-95
+          "
         >
           🛒 أضف للسلة
         </button>
 
+
+        {/* View Product */}
         <Link
           href={link}
-          className="block w-full mt-3 bg-red-600 hover:bg-red-700 py-3 rounded-xl text-center font-bold transition active:scale-95"
+          className="
+            block
+            w-full
+            mt-3
+            border
+            border-blue-500/70
+            text-white
+            hover:bg-blue-600/15
+            hover:border-blue-400
+            hover:shadow-[0_0_18px_rgba(37,99,235,0.2)]
+            py-3
+            rounded-xl
+            text-center
+            font-bold
+            transition-all
+            duration-300
+            active:scale-95
+          "
         >
           {buttonText}
         </Link>
