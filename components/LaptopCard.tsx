@@ -11,11 +11,12 @@ type Laptop = {
   image: string;
   category: string;
   price?: number | string;
-  stock?: number;
+  stock?: number | null;
 };
 
 export default function LaptopCard({ laptop }: { laptop: Laptop }) {
   const stock = Number(laptop.stock ?? 0);
+
   const isOutOfStock = stock <= 0;
   const isLastItem = stock === 1;
 
@@ -38,6 +39,7 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
   return (
     <div
       className="
+        relative
         group
         bg-zinc-950
         border border-zinc-800
@@ -50,37 +52,6 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
         hover:shadow-[0_15px_40px_rgba(37,99,235,0.15)]
       "
     >
-
-      {/* Stock Badge */}
-      <div
-        className={`
-          absolute
-          top-3
-          left-3
-          z-20
-          text-white
-          text-xs
-          font-black
-          px-3
-          py-2
-          rounded-xl
-          shadow-lg
-          ${
-            isOutOfStock
-              ? "bg-red-600"
-              : isLastItem
-              ? "bg-orange-500"
-              : "bg-green-600"
-          }
-        `}
-      >
-        {isOutOfStock
-          ? "❌ غير متاح"
-          : isLastItem
-          ? "⚡ آخر قطعة"
-          : "✅ متاح"}
-      </div>
-
       {/* Laptop Image */}
       <Link href={`/laptops/${laptop.id}`}>
         <div className="relative w-full h-64 overflow-hidden bg-zinc-900">
@@ -100,7 +71,17 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
           />
 
           {/* Image Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+          <div
+            className="
+              absolute
+              inset-0
+              bg-gradient-to-t
+              from-black/40
+              via-transparent
+              to-transparent
+              pointer-events-none
+            "
+          />
 
           {/* Blue Glow */}
           <div
@@ -142,7 +123,7 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
         <div className="mt-4 flex items-baseline gap-2">
 
           <span className="text-3xl font-black text-blue-400 tracking-tight">
-            {laptop.price}
+            {Number(laptop.price ?? 0).toLocaleString("en-US")}
           </span>
 
           <span className="text-sm font-semibold text-gray-400">
@@ -151,16 +132,27 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
 
         </div>
 
-       {/* Stock Status */}
-{!isOutOfStock && (
-  <p
-    className={`text-sm font-bold mt-2 ${
-      isLastItem ? "text-orange-400" : "text-green-400"
-    }`}
-  >
-    {isLastItem ? "⚡ آخر قطعة" : "🟢 متاح الآن"}
-  </p>
-)}
+        {/* Stock Status */}
+        <p
+          className={`
+            text-sm
+            font-bold
+            mt-2
+            ${
+              isOutOfStock
+                ? "text-red-400"
+                : isLastItem
+                ? "text-orange-400"
+                : "text-green-400"
+            }
+          `}
+        >
+          {isOutOfStock
+            ? "🔴 غير متاح حاليًا"
+            : isLastItem
+            ? "⚡ آخر قطعة"
+            : "🟢 متاح الآن"}
+        </p>
 
         {/* Add To Cart */}
         <button
@@ -212,7 +204,6 @@ export default function LaptopCard({ laptop }: { laptop: Laptop }) {
         </Link>
 
       </div>
-
     </div>
   );
 }
