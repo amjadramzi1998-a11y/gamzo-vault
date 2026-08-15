@@ -7,7 +7,6 @@ import ProductSection from "../components/ProductSection";
 import SiteRating from "@/components/SiteRating";
 import SiteComments from "@/components/SiteComments";
 
-export const revalidate = 0;
 
 export default async function Home() {
   const { data: products, error } = await supabase
