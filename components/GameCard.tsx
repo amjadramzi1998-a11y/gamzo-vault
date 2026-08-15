@@ -55,10 +55,10 @@ export default function GameCard({ game }: { game: Product }) {
 
   const isGame = game.category === "games";
 
-const stock = Number(game.stock ?? 0);
+  const stock = Number(game.stock ?? 0);
 
-const isOutOfStock = !isGame && stock <= 0;
-const isLastItem = !isGame && stock === 1;
+  const isOutOfStock = !isGame && stock <= 0;
+  const isLastItem = !isGame && stock === 1;
 
   const currentPrice = Number(game.price ?? 0);
   const oldPrice = Number(game.old_price ?? 0);
@@ -79,12 +79,12 @@ const isLastItem = !isGame && stock === 1;
       return;
     }
 
-   addToCart({
-  id: game.id,
-  name: game.name,
-  image: game.image,
-  category: game.category,
-});
+    addToCart({
+      id: game.id,
+      name: game.name,
+      image: game.image,
+      category: game.category,
+    });
 
     toast.success(`تمت إضافة ${game.name} إلى السلة 🛒`);
   }
@@ -127,66 +127,6 @@ const isLastItem = !isGame && stock === 1;
           خصم خاص
         </div>
       )}
-
-      {/* Stock Badge */}
-      {!isGame && (isOutOfStock ? (
-        <div
-          className="
-            absolute
-            top-3
-            left-3
-            z-30
-            bg-red-600
-            text-white
-            text-xs
-            font-black
-            px-3
-            py-2
-            rounded-xl
-            shadow-lg
-          "
-        >
-          ❌ غير متاح
-        </div>
-      ) : isLastItem ? (
-        <div
-          className="
-            absolute
-            top-3
-            left-3
-            z-30
-            bg-orange-500
-            text-white
-            text-xs
-            font-black
-            px-3
-            py-2
-            rounded-xl
-            shadow-lg
-          "
-        >
-          ⚡ آخر قطعة
-        </div>
-      ) : (
-        <div
-          className="
-            absolute
-            top-3
-            left-3
-            z-30
-            bg-green-600
-            text-white
-            text-xs
-            font-black
-            px-3
-            py-2
-            rounded-xl
-            shadow-lg
-          "
-        >
-          ✅ متاح
-        </div>
-            ))}
 
       {/* Discount Badge */}
       {hasDiscount && (
@@ -375,11 +315,31 @@ const isLastItem = !isGame && stock === 1;
 
             {hasDiscount && (
               <p className="text-green-400 text-xs font-bold mt-1">
-                وفر {(oldPrice - currentPrice).toLocaleString("en-US")} جنيه
+                وفر{" "}
+                {(oldPrice - currentPrice).toLocaleString("en-US")} جنيه
               </p>
             )}
 
           </div>
+        )}
+
+        {/* Stock Status */}
+        {!isGame && (
+          <p
+            className={`text-sm font-bold mt-2 ${
+              isOutOfStock
+                ? "text-red-400"
+                : isLastItem
+                ? "text-orange-400"
+                : "text-green-400"
+            }`}
+          >
+            {isOutOfStock
+              ? "🔴 غير متاح حاليًا"
+              : isLastItem
+              ? "⚡ آخر قطعة"
+              : "🟢 متاح الآن"}
+          </p>
         )}
 
         {/* Add To Cart */}
