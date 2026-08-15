@@ -53,9 +53,12 @@ export default function GameCard({ game }: { game: Product }) {
       ? "🛠️ خدمة"
       : "🔥 عرض";
 
-  const stock = Number(game.stock ?? 0);
-  const isOutOfStock = stock <= 0;
-  const isLastItem = stock === 1;
+  const isGame = game.category === "games";
+
+const stock = Number(game.stock ?? 0);
+
+const isOutOfStock = !isGame && stock <= 0;
+const isLastItem = !isGame && stock === 1;
 
   const currentPrice = Number(game.price ?? 0);
   const oldPrice = Number(game.old_price ?? 0);
@@ -126,7 +129,7 @@ export default function GameCard({ game }: { game: Product }) {
       )}
 
       {/* Stock Badge */}
-      {isOutOfStock ? (
+      {!isGame && (isOutOfStock ? (
         <div
           className="
             absolute
@@ -183,7 +186,7 @@ export default function GameCard({ game }: { game: Product }) {
         >
           ✅ متاح
         </div>
-      )}
+            ))}
 
       {/* Discount Badge */}
       {hasDiscount && (
