@@ -12,6 +12,7 @@ type Laptop = {
   category: string;
   description?: string;
   price?: number | string;
+  stock?: number;
 };
 
 export default function LaptopsPage() {
@@ -87,7 +88,6 @@ export default function LaptopsPage() {
 
         </div>
 
-
         {/* Search */}
         <div className="relative max-w-3xl mb-10">
 
@@ -136,7 +136,6 @@ export default function LaptopsPage() {
           )}
 
         </div>
-
 
         {/* Loading */}
         {loading ? (
